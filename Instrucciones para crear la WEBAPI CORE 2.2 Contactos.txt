@@ -1,0 +1,256 @@
+*****Proyecto ASP NET Core con plantilla Angular y que consume una WEB API*****
+
+1.-Crear un proyecto ASP NET Core 2.2 con la plantilla API
+
+2.-Creado el proyecto agregue una carpeta con nombre Models y agregar una Clase con nombre ContactosDBContext para sea la clase que nos permitira enlazarlas los Modelos
+	con la Base de Datos.
+3.- Ir a Herramientas >Administrador de Paquetes Nuget y dar clic en la opción Administrar paquetes Nuget para la Solución.
+	a)De clic en Examinar y escriba Microsoft.EntityFrameworkCore, seleccione la ultima versión estable  y de clic en el botón Install.
+	b)De clic en Examinar y escriba Microsoft.AspNetCore.Cors, seleccione la ultima versión estable  y de clic en el botón Install.
+
+4.- Agregue la clase Contactos dentro de la carpeta Models y anexe lo siguiente:
+ 	public class Contactos
+    	{
+        	[Key]
+        	public int Id { get; set; }
+        	[Required]
+        	[Column(TypeName = "nvarchar(100)")]
+        	public string Nombre { get; set; }
+        	[Required]
+        	[Column(TypeName = "bigint")]
+       	 	public long Celular { get; set; }
+        	[Required]
+        	[Column(TypeName = "nvarchar(3)")]
+        	public string Sexo { get; set; 
+	}
+
+5.- Agregue la clase ContactosViewModel dentro de la carpeta Models y anexe lo siguiente:
+
+ 	public class ContactosViewModel
+	{
+        	[Key]
+		[ScaffoldColumn(false)]
+	        [DisplayName("Id")]
+	        public int Id { get; set; }
+
+	        [ScaffoldColumn(false)]
+        	[Display(GroupName = "Contactos")]
+	        [DisplayName("Nombre")]
+	        [Required]
+        	public string Nombre { get; set; }
+
+	        [ScaffoldColumn(false)]
+        	[Display(GroupName = "Contactos")]
+	        [DisplayName("Celular")]
+        	[Required]
+	        public long Celular { get; set; }
+
+	        [ScaffoldColumn(false)]
+        	[Display(GroupName = "Contactos")]
+	        [DisplayName("Sexo")]
+        	[Required]
+	        public string Sexo { get; set; }
+
+	    }
+
+	Nota: Esta Clase no se generara en la BD cuando ejecute los comandos de migración porque la anotación ScaffoldColumn se establecio a false
+
+6.-Agregue lo siguiente a la clase ContactosDBContext (Control + . hace que el IDE le proporcione la librería recomendada)
+
+    public class ContactosDBContext:DbContext
+    {
+        
+        public ContactosDBContext(DbContextOptions<ContactosDBContext> options) : base(options)
+        {
+        }
+        public DbSet<Contactos> Contactos { get; set; }
+
+    }
+
+7.- En el archivo appsettings.json agregue lo siguiente para la cadena de Conexión.
+
+   "ConnectionStrings": {
+    "ContactosConnection": "Server=201701839-POAC\\SQLEXPRESS;Database=ContactosDB;Trusted_Connection=True;MultipleActiveResultSets=true;"
+  }
+
+8.-En el archivo Startup.cs en el metodo ConfigureServices agregue lo siguiente:
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddJsonOptions(Options=> {
+                    //Se anula que la serialización de keys( keys son las propiedades de una clase) de json convierta las primeras letras 
+                    //en minuscula para que sea igual al de la clase.
+                    var resolver = Options.SerializerSettings.ContractResolver;
+                    if (resolver != null)
+                    {
+                        (resolver as DefaultContractResolver).NamingStrategy = null;
+                    }
+                        
+                });;
+            services.AddDbContext<ContactosDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ContactosConnection")));
+	    //Directiva del mismo origen, impide que un sitio malintencionado lea datos confidenciales. 
+	    services.AddCors();
+        }
+9.- En el archivo Startup.cs en el metodo Configure agregue lo siguiente:
+
+	public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+            //Se agrega que sitios pueden consumir los servicios y metodos que contenga la API
+            app.UseCors(options => options.WithOrigins("http://localhost:3000"));
+
+            app.UseHttpsRedirection();
+            app.UseMvc();
+        }
+
+10.- Ir a Herramientas >Administrador de Paquetes Nuget y de clic en la copción Consola del Administrador de paquetes y ejecute los siguientes
+comandos para hacer la migración de las clases a la Base de Datos.
+
+	Add-Migration "Initial Create"
+
+	Update-Database
+
+11. De clic derecho sobre la carpeta Controller>Agregar>Controlador y de clic sobre la opción Controlador de API con acciones que usan EntityFramework
+
+	a)Seleccione la clase ContactosViewModel de la carpeta Models
+	b)Seleccione el contexto de datos ContactosDBContext
+	c)Escriba como nombre de controlador ContactosController
+
+     Despues de que se genere el código automaticamente dentro de cada metodo realice la busqueda, insercción, modificación y eliminación ocupando
+	la clase Contactos y retorne en la función que se necesite la clase ContactosViewModels para encapsular la clase Contactos que se mapea con 
+	la tabla Contactos con el Entity Framework, quedaran los cambios de la siguiente manera:
+
+	
+     [Route("api/[controller]")]
+    [ApiController]
+    public class ContactosController : ControllerBase
+    {
+        private readonly ContactosDBContext _context;
+
+        public ContactosController(ContactosDBContext context)
+        {
+            _context = context;
+        }
+
+        // GET: api/Contactos
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ContactosViewModel>>> GetContactos()
+        {
+            var list = new List<ContactosViewModel>();
+            var contactos = await _context.Contactos.ToListAsync();
+            list.AddRange(contactos.Select(item => new ContactosViewModel {
+                Id = item.Id,
+                Nombre = item.Nombre,
+                Celular = item.Celular,
+                Sexo = item.Sexo
+            }));
+
+            return list;
+        }
+
+        // GET: api/Contactos/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ContactosViewModel>> GetContactos(int id)
+        {
+            var contactos = await _context.Contactos.FindAsync(id);
+
+            if (contactos == null)
+            {
+                return NotFound();
+            }
+
+            return new ContactosViewModel {
+                Id = contactos.Id,
+                Nombre = contactos.Nombre,
+                Celular = contactos.Celular,
+                Sexo = contactos.Sexo
+                };
+        }
+
+        // PUT: api/Contactos/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutContactos(int id, ContactosViewModel contactosViewModel)
+        {
+            if (id != contactosViewModel.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(new Contactos {
+                Id = contactosViewModel.Id,
+                Nombre = contactosViewModel.Nombre,
+                Celular = contactosViewModel.Celular,
+                Sexo = contactosViewModel.Sexo
+            }).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ContactosExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        // POST: api/Contactos
+        [HttpPost]
+        public async Task<ActionResult<ContactosViewModel>> PostContactos(ContactosViewModel contactosViewModel)
+        {
+            _context.Contactos.Add(new Contactos {
+                Id = contactosViewModel.Id,
+                Nombre = contactosViewModel.Nombre,
+                Celular = contactosViewModel.Celular,
+                Sexo = contactosViewModel.Sexo
+            });
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetContactos", new { id = contactosViewModel.Id }, contactosViewModel);
+        }
+
+        // DELETE: api/Contactos/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ContactosViewModel>> DeleteContactos(int id)
+        {
+            var contactos = await _context.Contactos.FindAsync(id);
+            if (contactos == null)
+            {
+                return NotFound();
+            }
+
+            _context.Contactos.Remove(contactos);
+            await _context.SaveChangesAsync();
+
+            return  new ContactosViewModel
+            {
+                Id = contactos.Id,
+                Nombre = contactos.Nombre,
+                Celular = contactos.Celular,
+                Sexo = contactos.Sexo
+            };
+        }
+
+        private bool ContactosExists(int id)
+        {
+            return _context.Contactos.Any(e => e.Id == id);
+        }
+    }	

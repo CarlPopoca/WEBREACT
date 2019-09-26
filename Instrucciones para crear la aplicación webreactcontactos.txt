@@ -1,0 +1,51 @@
+*********Creación de proyecto webreactcontactos ********
+Abra un cmd y posicionese en la carpeta donde tendra el codigo del aplicativo, y ejecute el siguiente comando:
+	
+	create-react-app webreactcontactos
+	
+********Algunos comandos para trabajar*******
+Para iniciar el servidor de desarrollo:
+	 yarn start
+
+Para generar el build:
+	yarn build
+
+Para correr una prueba:
+	yarn test
+
+Para remover esta herramienta y copias de dependencias de compilación, configuración de archivos y scripts en el 
+directorio de la aplicación:
+
+  yarn eject
+
+*****Comandos para la configuración de la aplicación********
+
+Posicionese en la carpeta del código de la aplicación y ejecute los siguientes comandos.
+
+Instale reactstrap y sus dependencias:
+
+	npm install --save reactstrap react react-dom
+
+Instale bootstrap:
+
+	npm install --save bootstrap
+
+Agregue bootstrap y reactstrap:
+
+	yarn add bootstrap reactstrap
+
+Importe los estilos de bootstrap en el archivo src/index.js:
+
+	import 'bootstrap/dist/css/bootstrap.min.css';
+
+Importe componentes de reactstrap  en el archivo src/App.js, ejemplo:
+
+	import { Table, Button} from 'reactstrap';
+
+	Nota: Si quiere conocer más acerca de estos comando vaya a la página https://reactstrap.github.io/ 
+
+Agregue axios:
+
+	yarn add axios
+
+
