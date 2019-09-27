@@ -65,7 +65,7 @@ namespace WEBAPICORE_2._2_CONTACTOS.Controllers
             }
 
             _context.Entry(new Contactos {
-                Id = contactosViewModel.Id,
+                Id = id,
                 Nombre = contactosViewModel.Nombre,
                 Celular = contactosViewModel.Celular,
                 Sexo = contactosViewModel.Sexo
