@@ -1,7 +1,14 @@
 import React, {Component} from 'react';
 import {Label, FormGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, Table, Button} from 'reactstrap';
 import axios from 'axios';
+//Una Clase que extiende del component de React se comvierte en una etiqueta html
 class App extends Component  {
+  //Se declara en el objeto state las variables que mantendran el valor
+  //Contactos - Los datos que llenaran el Table
+  //datosNuevoContacto - Los datos para la Alta
+  //datosEditarContacto - Los datos para la modificación
+  //nuevoContactoModal - Para la visualización y cierre de la ventana modal de Alta
+ //editarContactoModal - Para la visualización  y cierre de la ventana modal de modificación
   state = {
     contactos: [],
     datosNuevoContacto: {
@@ -18,10 +25,14 @@ class App extends Component  {
     nuevoContactoModal: false,
     editarContactoModal: false
   }
+ //Método que refrescara el Table
   componentWillMount(){
     this.refrescarContactos();
   }
-
+//Método que niega el valor de la variable nuevoContactoModal inicializada en false, esto
+//permite mostrar el Modal para la Alta y inicializa los datos del objeto datosNuevoContacto, y
+//Se regresa el valor de la variable nuevoContactoModal a false cuando se pulsa el botón de cerrar y
+//cuando se pulsa el botón de cancelar
   toggleNuevoContactoModal() {
     this.setState({
       nuevoContactoModal: !this.state.nuevoContactoModal,
@@ -32,7 +43,10 @@ class App extends Component  {
       }
     });
   }
-
+  //Método que niega el valor de la variable editarContactoModal inicializada en false, esto
+  //permite mostrar el Modal para la Modificación y
+  //se regresa el valor de la variable editarContactoModal a false cuando se pulsa el botón de cerrar y
+  //cuando se pulsa el botón de cancelar
   toggleEditarContactoModal() {
     //Este metodo se dispara cuando se cierra la ventana modal de editar, y cuando se pulsa el botón de Cancelar
     // convierte el valor de la variable editarContactoModal a false
@@ -40,6 +54,7 @@ class App extends Component  {
     editarContactoModal: !this.state.editarContactoModal
   });
 }
+//Método que permite guardar los datos capturados en el modal de Alta
   agregarContacto (){
 
     axios.post('https://localhost:44386/api/Contactos', this.state.datosNuevoContacto).then((response)=>{
@@ -48,7 +63,7 @@ class App extends Component  {
     let {contactos} = this.state;
     //Se agrega al final el contacto que devolvio el metodo post de la api contactos
     contactos.push(response.data);
-    //Inicializa el estado de las variables
+    //Inicializa el estado de las variables nuevoContactoModal y el objeto datosNuevoContacto
     this.setState({contactos, nuevoContactoModal:false, datosNuevoContacto: {
       Nombre: '',
       Celular: '',
@@ -58,6 +73,7 @@ class App extends Component  {
     });
   }
 
+//Método que permite guardar los datos capturados en el modal de Modificación
   actualizarContacto()
   {
     let {Id, Nombre, Celular, Sexo} = this.state.datosEditarContacto;
@@ -65,9 +81,9 @@ class App extends Component  {
       axios.put('https://localhost:44386/api/Contactos/' + this.state.datosEditarContacto.Id, {
       Id, Nombre, Celular, Sexo
     }).then((response)=>{
-
+      //Se refresca el Table
       this.refrescarContactos();
-
+      //Se inicializan la variable editarContactoModal y el objeto de datosEditarContacto
       this.setState({editarContactoModal: false, datosEditarContacto: {
             Id: '',
             Nombre: '',
@@ -76,7 +92,7 @@ class App extends Component  {
           }});
     });
   }
-
+//Método para eliminar un Contacto
  eliminarContacto(id){
    axios.delete('https://localhost:44386/api/Contactos/'+id).then((response)=>{
      this.refrescarContactos();
@@ -88,20 +104,27 @@ class App extends Component  {
             contactos: response.data
       })
     });
-
   }
+
+  //Nota: this.state mantiene el estado de las variables, es como un get pero para setear una  variables se
+  // se debe ocupar
+
+  //Método para actualizar los datos
   editarContacto (Id, Nombre, Celular, Sexo)
   {
-    //Se setea el objeto datosEditarContacto al pulsar el botón de editar
-    //Por default la variable editarContactoModal es false pero se niega este valor seteando como verdadero
-    //Nota: this.state mantiene el estado de las variables, es como un get pero para setear una  variables se
-    //  debe ocupar this.setState
+    //Por default la variable editarContactoModal es false pero se niega este valor seteando a verdadero,
+    // y de esta manera se consigue visualizar el modal de mdificación y setearle los datos a los controles
     this.setState({
      datosEditarContacto: {Id, Nombre, Celular, Sexo}, editarContactoModal:! this.state.editarContactoModal
    });
   }
+
   render(){
+    //Se setea a la variable local contactosReg el objeto contactos que se lleno al ejecutarse el método
+    //componentWillMount en automatico y se retorna las filas del Table más una columna con los botones de
+    //Editar y eliminar
     let contactosReg = this.state.contactos.map((contacto)=>{
+
       return(
         <tr key={contacto.Id}>
           <td>{contacto.Id}</td>
@@ -115,8 +138,27 @@ class App extends Component  {
         </tr>
       )
     });
-    //Esta ventana Modal con su atributo se abre en automatico cuando la variable editarContactoModal cambia a true
+
+    // El botón Agregar cambia a true la variable nuevoContactoModal por medio del metodo toggleNuevoContactoModal
+
+    //Modal para modificar datos se abre en automatico cuando su atributo isOpen cambia a verdadero por medio de la variable nuevoContactoModal
+    //y se cierra cuando la misma variable cambia a false al presionarse los botones cerrar (x) y cancelar
+
+    //Modal para modificar datos  se abre en automatico cuando su atributo isOpen cambia a verdadero por medio de la variable editarContactoModal
     //y se cierra cuando la misma variable cambia a false al presionarse los botones de cerrar (x) y cancelar
+
+    //ModalHeader: Encabezado del Modal
+    //ModalBody: Contenedor de controles
+    //ModalFooter:  Pie del Modal, se utiliza comunmente para añadir botones
+
+    //FormGroup: Agrupador de Controles
+    //Input propiedad value : se le puede ligar una propiedad de un objeto state, y con el método onChange asignarle
+    //al value lo que se captura.
+    // let {datosNuevoContacto} = this.state;,  se setea el estado y se almacena lo que se captura
+    // datosNuevoContacto.Nombre = e.target.value;, se setea lo que se captura en el input en la propiedad que se indica
+    // this.setState({datosNuevoContacto});, se confirma el seteo de la propiedad del objeto
+
+    //<tbody>{contactosReg}</tbody>, la variable local contactosReg proporciona los filas del Table
     return (
       <div className="App container">
         <h1>Aplicación de Contactos</h1>
