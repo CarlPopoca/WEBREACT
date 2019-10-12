@@ -41,7 +41,6 @@ Instale react-router-dom:
 Agregue react-router-dom:
 
 	yarn add react-router-dom
-		
 
 Importe los estilos de bootstrap en el archivo src/index.js:
 
