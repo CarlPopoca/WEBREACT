@@ -42,6 +42,13 @@ Agregue react-router-dom:
 
 	yarn add react-router-dom
 
+Agregue las siguientes librerias para iconos de forawesome:
+
+	yarn add @fortawesome/fontawesome-svg-core
+	yarn add @fortawesome/free-solid-svg-icons
+	yarn add @fortawesome/react-fontawesome
+	yarn add @fortawesome/free-brands-svg-icons
+
 Importe los estilos de bootstrap en el archivo src/index.js:
 
 	import 'bootstrap/dist/css/bootstrap.min.css';

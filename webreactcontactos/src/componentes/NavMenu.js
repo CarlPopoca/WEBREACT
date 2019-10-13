@@ -44,7 +44,7 @@ class NavMenu extends Component {
                        <NavLink href="/ingresar">Ingresar</NavLink>
                      </NavItem>
                      <NavItem>
-                       <NavLink href="/registrarUsuario">registrarUsuario</NavLink>
+                       <NavLink href="/registrarUsuario">Registrar Usuario</NavLink>
                      </NavItem>
                 </Fragment>
                    )

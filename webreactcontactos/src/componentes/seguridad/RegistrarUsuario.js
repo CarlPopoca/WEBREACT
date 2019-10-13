@@ -45,11 +45,9 @@ class RegistrarUsuario extends Component{
   submitForm()
   {
     //const {nombreUsuario, password}  = this.state;
-    alert(this.state.datosUsuario.ConfirmPassword);
 
       axios.post('https://localhost:44328/api/Usuarios/Registrar', this.state.datosUsuario).then((response)=>{
 
-        alert("Password");
       //Se refresca el Table
       this.ingresoUsuario();
       //Se inicializan la variable editarContactoModal y el objeto de datosEditarContacto

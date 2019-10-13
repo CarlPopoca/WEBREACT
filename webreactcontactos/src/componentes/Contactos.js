@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import {Label, FormGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, Table, Button} from 'reactstrap';
 import { Link, Redirect} from 'react-router-dom';
 import axios from 'axios';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 /*import Navegacion from './Navegacion';*/
 //Una Clase que extiende del component de React se comvierte en una etiqueta html
 class Contactos extends Component  {
@@ -106,9 +109,40 @@ class Contactos extends Component  {
   }
 //Método para eliminar un Contacto
  eliminarContacto(id){
-   axios.delete('https://localhost:44386/api/Contactos/'+id).then((response)=>{
-     this.refrescarContactos();
-   });
+
+   confirmAlert({
+    customUI: ({ onClose }) => {
+      return (
+        <div className='custom-ui'>
+
+          <h1 className="glyphicon glyphicon-warning-sign">
+            <FontAwesomeIcon className="mr-3" icon="exclamation-triangle" />
+            Esta seguro de eliminar el registro?</h1>
+          <div className="btn-toolbar row" role="toolbar">
+            <div className="col-sm-4"></div>
+          <div className="btn-group col-sm-4">
+              <Button color="secondary" size="sm" className="mr-3" onClick={onClose}>
+                  <FontAwesomeIcon className="mr-1" icon="times" />
+                  No
+               </Button>
+              <Button color="primary" size="sm" className="btn btn-default "
+                  onClick={() => {
+                    axios.delete('https://localhost:44386/api/Contactos/'+id).then((response)=>{
+                       this.refrescarContactos();
+                       onClose();
+                     });
+                  }}
+                >
+                  <FontAwesomeIcon className="mr-1" icon="check" />
+                   Si
+              </Button>
+              </div>
+                <div className="col-sm-4"></div>
+            </div>
+          </div>
+      );
+    }
+  });
  }
   refrescarContactos(){
     axios.get('https://localhost:44386/api/Contactos').then((response)=>{
