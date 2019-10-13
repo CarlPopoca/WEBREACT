@@ -4,7 +4,6 @@ import {Redirect} from 'react-router-dom'
  import axios from 'axios';
  import AlertaSatisfactoria from '../../componentes/AlertaSatisfactoria';
  import AlertaError from '../../componentes/AlertaError';
-/*import Navegacion from '../../componentes/Navegacion';*/
 
 class Ingresar extends Component{
   constructor(props){
@@ -23,17 +22,10 @@ class Ingresar extends Component{
       },
       loggedIn
     }
-
   }
 
-  /*onChange(e){
-    this.setState({
-      datosUsuario:[e.target.name]: e.target.value
-    })
-  }*/
   submitForm()
   {
-
       axios.post('https://localhost:44328/api/Usuarios/Ingresar', this.state.datosUsuario).then((response)=>{
         //Se genera el token
         localStorage.setItem("token", "jasdajalkcecklwcljekwej");
@@ -53,15 +45,6 @@ class Ingresar extends Component{
               alert_message: 'Credenciales incorrectas'
             });
       });
-
-    //La llamada al servicio
-    /*if (nombreUsuario==="A" && password==="B"){
-
-      localStorage.setItem("token", "jasdajalkcecklwcljekwej");
-      this.setState({
-        loggedIn: true
-      })
-    }*/
 }
 
   render(){
@@ -70,7 +53,6 @@ class Ingresar extends Component{
       // this.props.history.push("/")
       //return <Redirect  to="/" />
       window.location.href='/';
-
     }
     return (
 
@@ -83,7 +65,6 @@ class Ingresar extends Component{
                   <div class="col-sm-10 offset-sm-1 text-center">
                       <h1 class="display-5  my-5">Login</h1>
                       <div class="info-form">
-
 
                           <div class="form-group">
                             <label htmlFor="Email">Usuario: </label>
@@ -113,14 +94,11 @@ class Ingresar extends Component{
                        </div>
 
                        <button class="btn btn-success" onClick={this.submitForm.bind(this)}>Ingresar</button>
-
-
                     </div>
                   </div>
-    </div>
-  </div>
-</div>
-
+                </div>
+            </div>
+        </div>
     )
   }
 }

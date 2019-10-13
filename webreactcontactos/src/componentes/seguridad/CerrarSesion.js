@@ -1,22 +1,18 @@
 import React, {Component} from 'react';
 import { Link, Redirect} from 'react-router-dom';
-/*import Navegacion from '../../componentes/Navegacion';*/
+import axios from 'axios';
 
 class CerrarSesion extends Component{
   constructor(props){
     super(props);
     localStorage.removeItem("token");
+    this.Salir();
   }
-  render (){
-    return (
-      <div id="divCerrarSesion">
-
-        <div className="App container">
-          <h1>Ha salido</h1>
-        <a class="nav-link text-blue" href="/">Intentelo de nuevo</a>
-        </div>
-      </div>
-    )
+  Salir()
+  {
+    axios.post('https://localhost:44328/api/Usuarios/CerrarSesion').then((response)=>{
+        window.location.href='/';
+      });
   }
 }
 

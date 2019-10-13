@@ -4,7 +4,7 @@ import { Link, Redirect} from 'react-router-dom';
 import axios from 'axios';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 /*import Navegacion from './Navegacion';*/
 //Una Clase que extiende del component de React se comvierte en una etiqueta html
 class Contactos extends Component  {
@@ -75,15 +75,15 @@ class Contactos extends Component  {
     axios.post('https://localhost:44386/api/Contactos', this.state.datosNuevoContacto).then((response)=>{
     //Se setea la variable de state contactos, los simbolo {} permiten usarla para setearla por medio de let
     //this.state contiene los contactos que se renderizaron en el Table
-    let {contactos} = this.state;
-    //Se agrega al final el contacto que devolvio el metodo post de la api contactos
-    contactos.push(response.data);
-    //Inicializa el estado de las variables nuevoContactoModal y el objeto datosNuevoContacto
-    this.setState({contactos, nuevoContactoModal:false, datosNuevoContacto: {
-      Nombre: '',
-      Celular: '',
-      Sexo: ''
-    }});
+      let {contactos} = this.state;
+      //Se agrega al final el contacto que devolvio el metodo post de la api contactos
+      contactos.push(response.data);
+      //Inicializa el estado de las variables nuevoContactoModal y el objeto datosNuevoContacto
+      this.setState({contactos, nuevoContactoModal:false, datosNuevoContacto: {
+        Nombre: '',
+        Celular: '',
+        Sexo: ''
+      }});
 
     });
   }
@@ -104,7 +104,7 @@ class Contactos extends Component  {
             Nombre: '',
             Celular: '',
             Sexo: ''
-          }});
+        }});
     });
   }
 //Método para eliminar un Contacto
@@ -140,21 +140,20 @@ class Contactos extends Component  {
                 <div className="col-sm-4"></div>
             </div>
           </div>
-      );
-    }
-  });
+        );
+      }
+    });
  }
   refrescarContactos(){
     axios.get('https://localhost:44386/api/Contactos').then((response)=>{
       this.setState({
-            contactos: response.data
+        contactos: response.data
       })
     });
   }
 
-  //Nota: this.state mantiene el estado de las variables, es como un get pero para setear una  variables se
+  //Nota: this.state mantiene el estado de las variables, es como un get pero para setear una  variables
   // se debe ocupar
-
   //Método para actualizar los datos
   editarContacto (Id, Nombre, Celular, Sexo)
   {
@@ -166,7 +165,7 @@ class Contactos extends Component  {
   }
 
   render(){
-    if(this.state.loggedIn===false)
+    if(this.state.loggedIn==false)
     {
       return <Redirect  to="/" />
     }
@@ -174,7 +173,6 @@ class Contactos extends Component  {
     //componentWillMount en automatico y se retorna las filas del Table más una columna con los botones de
     //Editar y eliminar
     let contactosReg = this.state.contactos.map((contacto)=>{
-
       return(
         <tr key={contacto.Id}>
           <td>{contacto.Id}</td>
@@ -215,75 +213,74 @@ class Contactos extends Component  {
       <div className="App container">
         <h1>Aplicación de Contactos</h1>
 
-      <Button  className="my-3" color="primary" onClick={this.toggleNuevoContactoModal.bind(this)}>Agregar</Button>
-      <Modal isOpen={this.state.nuevoContactoModal}  toggle={this.toggleNuevoContactoModal.bind(this)}>
-        <ModalHeader toggle={this.toggleNuevoContactoModal.bind(this)}>Agregar un Contacto</ModalHeader>
-        <ModalBody>
+        <Button  className="my-3" color="primary" onClick={this.toggleNuevoContactoModal.bind(this)}>Agregar</Button>
+        <Modal isOpen={this.state.nuevoContactoModal}  toggle={this.toggleNuevoContactoModal.bind(this)}>
+          <ModalHeader toggle={this.toggleNuevoContactoModal.bind(this)}>Agregar un Contacto</ModalHeader>
+          <ModalBody>
+            <FormGroup>
+              <Label for="Nombre">Nombre</Label>
+              <Input  id="Nombre" value={this.state.datosNuevoContacto.Nombre} onChange={(e)=>{
+                let {datosNuevoContacto} = this.state;
+                datosNuevoContacto.Nombre = e.target.value;
+                this.setState({datosNuevoContacto});
+              }}/>
+            </FormGroup>
+            <FormGroup>
+              <Label for="Celular">Celular</Label>
+              <Input  id="Celular" value={this.state.datosNuevoContacto.Celular} onChange={(e)=>{
+                let {datosNuevoContacto} = this.state;
+                datosNuevoContacto.Celular = e.target.value;
+                this.setState({datosNuevoContacto});
+              }}/>
+            </FormGroup>
+            <FormGroup>
+              <Label for="Sexo">Sexo</Label>
+              <Input  id="Sexo" value={this.state.datosNuevoContacto.Sexo} onChange={(e)=>{
+                let {datosNuevoContacto} = this.state;
+                datosNuevoContacto.Sexo = e.target.value;
+                this.setState({datosNuevoContacto});
+              }}/>
+            </FormGroup>
+          </ModalBody>
+         <ModalFooter>
+           <Button color="primary" onClick={this.agregarContacto.bind(this)}>Guardar</Button>{' '}
+           <Button color="secondary" onClick={this.toggleNuevoContactoModal.bind(this)}>Cancelar</Button>
+         </ModalFooter>
+        </Modal>
+
+        <Modal isOpen={this.state.editarContactoModal}  toggle={this.toggleEditarContactoModal.bind(this)}>
+         <ModalHeader toggle={this.toggleEditarContactoModal.bind(this)}>Editar un Contacto</ModalHeader>
+         <ModalBody>
           <FormGroup>
             <Label for="Nombre">Nombre</Label>
-            <Input  id="Nombre" value={this.state.datosNuevoContacto.Nombre} onChange={(e)=>{
-              let {datosNuevoContacto} = this.state;
-              datosNuevoContacto.Nombre = e.target.value;
-              this.setState({datosNuevoContacto});
+            <Input  id="Nombre" value={this.state.datosEditarContacto.Nombre} onChange={(e)=>{
+              let {datosEditarContacto} = this.state;
+              datosEditarContacto.Nombre = e.target.value;
+              this.setState({datosEditarContacto});
             }}/>
           </FormGroup>
           <FormGroup>
             <Label for="Celular">Celular</Label>
-            <Input  id="Celular" value={this.state.datosNuevoContacto.Celular} onChange={(e)=>{
-              let {datosNuevoContacto} = this.state;
-              datosNuevoContacto.Celular = e.target.value;
-              this.setState({datosNuevoContacto});
+            <Input  id="Celular" value={this.state.datosEditarContacto.Celular} onChange={(e)=>{
+              let {datosEditarContacto} = this.state;
+              datosEditarContacto.Celular = e.target.value;
+              this.setState({datosEditarContacto});
             }}/>
           </FormGroup>
           <FormGroup>
             <Label for="Sexo">Sexo</Label>
-            <Input  id="Sexo" value={this.state.datosNuevoContacto.Sexo} onChange={(e)=>{
-              let {datosNuevoContacto} = this.state;
-              datosNuevoContacto.Sexo = e.target.value;
-              this.setState({datosNuevoContacto});
+            <Input  id="Sexo" value={this.state.datosEditarContacto.Sexo} onChange={(e)=>{
+              let {datosEditarContacto} = this.state;
+              datosEditarContacto.Sexo = e.target.value;
+              this.setState({datosEditarContacto});
             }}/>
           </FormGroup>
         </ModalBody>
-       <ModalFooter>
-         <Button color="primary" onClick={this.agregarContacto.bind(this)}>Guardar</Button>{' '}
-         <Button color="secondary" onClick={this.toggleNuevoContactoModal.bind(this)}>Cancelar</Button>
-       </ModalFooter>
-      </Modal>
-
-      <Modal isOpen={this.state.editarContactoModal}  toggle={this.toggleEditarContactoModal.bind(this)}>
-       <ModalHeader toggle={this.toggleEditarContactoModal.bind(this)}>Editar un Contacto</ModalHeader>
-       <ModalBody>
-        <FormGroup>
-          <Label for="Nombre">Nombre</Label>
-          <Input  id="Nombre" value={this.state.datosEditarContacto.Nombre} onChange={(e)=>{
-            let {datosEditarContacto} = this.state;
-            datosEditarContacto.Nombre = e.target.value;
-            this.setState({datosEditarContacto});
-          }}/>
-        </FormGroup>
-        <FormGroup>
-          <Label for="Celular">Celular</Label>
-          <Input  id="Celular" value={this.state.datosEditarContacto.Celular} onChange={(e)=>{
-            let {datosEditarContacto} = this.state;
-            datosEditarContacto.Celular = e.target.value;
-            this.setState({datosEditarContacto});
-          }}/>
-        </FormGroup>
-        <FormGroup>
-          <Label for="Sexo">Sexo</Label>
-          <Input  id="Sexo" value={this.state.datosEditarContacto.Sexo} onChange={(e)=>{
-            let {datosEditarContacto} = this.state;
-            datosEditarContacto.Sexo = e.target.value;
-            this.setState({datosEditarContacto});
-          }}/>
-        </FormGroup>
-      </ModalBody>
-      <ModalFooter>
-        <Button color="primary" onClick={this.actualizarContacto.bind(this)}>Guardar</Button>{' '}
-        <Button color="secondary" onClick={this.toggleEditarContactoModal.bind(this)}>Cancelar</Button>
-      </ModalFooter>
-     </Modal>
-
+        <ModalFooter>
+          <Button color="primary" onClick={this.actualizarContacto.bind(this)}>Guardar</Button>{' '}
+          <Button color="secondary" onClick={this.toggleEditarContactoModal.bind(this)}>Cancelar</Button>
+        </ModalFooter>
+       </Modal>
         <Table>
           <thead>
             <tr>

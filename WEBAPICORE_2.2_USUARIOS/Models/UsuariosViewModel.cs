@@ -10,13 +10,11 @@ namespace WEBAPICORE_2._2_USUARIOS.Models
     {
         [Key]
         [Required]
-
         public string Email { get; set; }
 
         [Required]
         public string Password { get; set; }
-       
-        public string ConfirmPassword { get; set; }
 
+        public string ConfirmPassword { get; set; }
     }
 }
