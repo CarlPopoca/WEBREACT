@@ -211,7 +211,7 @@ class Contactos extends Component  {
       <div id="divContactos">
 
       <div className="App container">
-        <h1>Aplicación de Contactos</h1>
+        <h2>Aplicación de Contactos</h2>
 
         <Button  className="my-3" color="primary" onClick={this.toggleNuevoContactoModal.bind(this)}>Agregar</Button>
         <Modal isOpen={this.state.nuevoContactoModal}  toggle={this.toggleNuevoContactoModal.bind(this)}>

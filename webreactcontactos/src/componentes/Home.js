@@ -9,7 +9,7 @@ class Home extends Component  {
 
           <div className="App container">
 
-            <h2>Esta es una aplicación de React de administracción de contactos, nos permite conocer más acerca del lenguaje </h2>
+            <h3>Aplicación de React con Apis de seguridad y contactos en ASP NET Core 2.2 </h3>
           </div>
         </div>
       );

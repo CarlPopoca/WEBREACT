@@ -67,7 +67,7 @@ class Ingresar extends Component{
           RemenberMe: false
             }});
         }).catch(error=>{
-          alert ('error');
+
             this.setState({
               alert_message: 'Credenciales incorrectas'
             });
@@ -89,22 +89,18 @@ class Ingresar extends Component{
         <hr/>
           {this.state.alert_message!=""?<AlertaError mensaje={this.state.alert_message} />:null}
           <div id="container" className="container">
-
               <div className="row">
                   <div className="col-sm-6 offset-sm-4 text-center">
-                      <h1 className="col-sm-6 display-5  my-4">Login</h1>
-                      <div className="info-form ">
-
+                    <h1 className="col-sm-7 display-5  my-4">Login</h1>
+                    <div className="info-form col-sm-7">
                             <div className="form-group">
                               <div className="input-group">
                                 <div className="input-group-prepend">
                                   <div className="input-group-text bg-white">
-
                                     <i className= {(this.state.isNullEmail?'red-icon':'green-icon')}>  <FontAwesomeIcon className="mr-1" icon="user-circle" /></i>
                                   </div>
                                 </div>
-
-                                <input type= "text" placeholder="Usuario" name="Email" value={this.state.datosUsuario.Email} onChange={(e)=>{
+                                <input className="form-control" type= "text" placeholder="Usuario" name="Email" value={this.state.datosUsuario.Email} onChange={(e)=>{
                                     let {datosUsuario} = this.state;
                                     datosUsuario.Email = e.target.value;
                                     this.setState({datosUsuario});
@@ -119,7 +115,6 @@ class Ingresar extends Component{
                                     }}/>
                             </div>
                           </div>
-
                           <div className="form-group">
                             <div className="input-group">
                                <div className="input-group-prepend">
@@ -127,7 +122,7 @@ class Ingresar extends Component{
                                    <i className= {(this.state.isNullPassword?'red-icon':'green-icon')}>  <FontAwesomeIcon className="mr-1" icon="key" /></i>
                                  </div>
                                </div>
-                                <input  type= "password" placeholder="Password" name="Password" value={this.state.datosUsuario.Password} onChange={(e)=>{
+                                <input  className="form-control" type= "password" placeholder="Password" name="Password" value={this.state.datosUsuario.Password} onChange={(e)=>{
                                     let {datosUsuario} = this.state;
                                     datosUsuario.Password = e.target.value;
                                     this.setState({datosUsuario});
@@ -142,11 +137,9 @@ class Ingresar extends Component{
                                     }}/>
                             </div>
                           </div>
-
                           <div className="form-group">
                             <div className="input-group">
                               <div className="form-check">
-
                                 <input type="checkbox" name="RemenberMe"
                                    className="form-check-input" value={this.state.datosUsuario.RemenberMe} onChange={(e)=>{
                                        let {datosUsuario} = this.state;
@@ -158,13 +151,10 @@ class Ingresar extends Component{
                           </div>
                         </div>
                          <div className="form-group">
-                           <div className="col-sm-6">
                              <button className="btn btn-success" onClick={this.submitForm.bind(this)}>
                                <FontAwesomeIcon className="mr-2" icon="sign-in-alt" />
                                Ingresar</button>
-                           </div>
                         </div>
-
                     </div>
                   </div>
                 </div>
