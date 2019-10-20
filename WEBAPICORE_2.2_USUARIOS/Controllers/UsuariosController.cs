@@ -21,6 +21,12 @@ namespace WEBAPICORE_2._2_USUARIOS.Controllers
             this.userManager = userManager;
             this.signInManager = signInManager;
         }
+        // GET api/values
+        [HttpGet]
+        public ActionResult<IEnumerable<string>> Get()
+        {
+            return new string[] { "value1", "value2" };
+        }
 
         // POST: api/Usuarios/Ingresar
         [HttpPost]

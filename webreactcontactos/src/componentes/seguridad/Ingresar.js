@@ -21,19 +21,44 @@ class Ingresar extends Component{
         Password: '',
         RemenberMe: false
       },
-      loggedIn
+      loggedIn,
+      isNullEmail: true,
+      isNullPassword: true
     }
+  }
+  validacionControles() {
+    if (this.state.datosUsuario.Email=='' && this.state.datosUsuario.Password=='')
+    {
+      this.setState({
+        alert_message: 'Introduzca el usuario y el password',
+        isNullEmail: true,
+        isNullPassword: true
+      });
+      return false;
+    }
+    if (this.state.datosUsuario.Password.length < 10)
+    {
+      this.setState({
+        alert_message: 'El password debe tener diez caracteres',
+        isNullPassword: true,
+      });
+       return false;
+    }
+    return  true;
   }
 
   submitForm()
   {
+
+    let valControles = this.validacionControles();
+    if (valControles){
       axios.post('https://localhost:44328/api/Usuarios/Ingresar', this.state.datosUsuario).then((response)=>{
         //Se genera el token
         localStorage.setItem("token", "jasdajalkcecklwcljekwej");
         //Se setea que ingreso
         this.setState({
           loggedIn: true,
-          alert_message: 'Acceso satisfactorio'
+          alert_message: ''
         });
         //Se inicializan la variable editarContactoModal y el objeto de datosEditarContacto
         this.setState({datosUsuario: {
@@ -42,10 +67,13 @@ class Ingresar extends Component{
           RemenberMe: false
             }});
         }).catch(error=>{
+          alert ('error');
             this.setState({
               alert_message: 'Credenciales incorrectas'
             });
       });
+    }
+
 }
 
   render(){
@@ -59,21 +87,20 @@ class Ingresar extends Component{
 
       <div id="cover-caption">
         <hr/>
-          {this.state.alert_message=="Credenciales incorrectas"?<AlertaError mensaje={this.state.alert_message} />:null}
-          <div id="container" class="container">
+          {this.state.alert_message!=""?<AlertaError mensaje={this.state.alert_message} />:null}
+          <div id="container" className="container">
 
-              <div class="row">
-                  <div class="col-sm-6 offset-sm-4 text-center">
-                      <h1 class="col-sm-6 display-5  my-4">Login</h1>
-                      <div class="info-form ">
-                        <form action="" class="form-inlin justify-content-center">
+              <div className="row">
+                  <div className="col-sm-6 offset-sm-4 text-center">
+                      <h1 className="col-sm-6 display-5  my-4">Login</h1>
+                      <div className="info-form ">
 
-                            <div class="form-group">
-                              <div class="input-group">
-                                <div class="input-group-prepend">
-                                  <div class="input-group-text bg-white">
+                            <div className="form-group">
+                              <div className="input-group">
+                                <div className="input-group-prepend">
+                                  <div className="input-group-text bg-white">
 
-                                    <i>  <FontAwesomeIcon className="mr-1" icon="user-circle" /></i>
+                                    <i className= {(this.state.isNullEmail?'red-icon':'green-icon')}>  <FontAwesomeIcon className="mr-1" icon="user-circle" /></i>
                                   </div>
                                 </div>
 
@@ -81,54 +108,70 @@ class Ingresar extends Component{
                                     let {datosUsuario} = this.state;
                                     datosUsuario.Email = e.target.value;
                                     this.setState({datosUsuario});
-                                  }} required="true"/>
+                                  }} required="true" onBlur={(e)=>{
+                                    let {isNullEmail} = this.state;
+                                    if (e.target.value == '')
+                                      {
+                                        this.setState({isNullEmail: true});
+                                      }else {
+                                        this.setState({isNullEmail: false, alert_message: ''});
+                                      }
+                                    }}/>
                             </div>
                           </div>
 
-                          <div class="form-group">
-                            <div class="input-group">
-                               <div class="input-group-prepend">
-                                 <div class="input-group-text bg-white">
-                                   <i>  <FontAwesomeIcon className="mr-1" icon="key" /></i>
+                          <div className="form-group">
+                            <div className="input-group">
+                               <div className="input-group-prepend">
+                                 <div className="input-group-text bg-white">
+                                   <i className= {(this.state.isNullPassword?'red-icon':'green-icon')}>  <FontAwesomeIcon className="mr-1" icon="key" /></i>
                                  </div>
                                </div>
                                 <input  type= "password" placeholder="Password" name="Password" value={this.state.datosUsuario.Password} onChange={(e)=>{
                                     let {datosUsuario} = this.state;
                                     datosUsuario.Password = e.target.value;
                                     this.setState({datosUsuario});
-                                  }}  required="true"/>
+                                  }}  required="true" maxlength="10" minlength="10" onBlur={(e)=>{
+                                    let {isNullPassword} = this.state;
+                                    if (e.target.value == '')
+                                      {
+                                        this.setState({isNullPassword: true});
+                                      }else {
+                                        this.setState({isNullPassword: false, alert_message: ''});
+                                      }
+                                    }}/>
                             </div>
                           </div>
 
-                          <div class="form-group">
-                            <div class="input-group">
-                              <div class="form-check">
+                          <div className="form-group">
+                            <div className="input-group">
+                              <div className="form-check">
 
                                 <input type="checkbox" name="RemenberMe"
-                                   class="form-check-input" value={this.state.datosUsuario.RemenberMe} onChange={(e)=>{
+                                   className="form-check-input" value={this.state.datosUsuario.RemenberMe} onChange={(e)=>{
                                        let {datosUsuario} = this.state;
                                        datosUsuario.RemenberMe = e.target.value;
                                        this.setState({datosUsuario});
                                    }}/>
-                                   <label htmlFor="RemenberMe" class="form-check-label">Recordar sesión</label>
+                                   <label htmlFor="RemenberMe" className="form-check-label">Recordar sesión</label>
                               </div>
                           </div>
                         </div>
-                         <div class="form-group">
-                           <div class="col-sm-6">
-                             <button class="btn btn-success" onClick={this.submitForm.bind(this)}>
-                               <FontAwesomeIcon className="mr-1" icon="sign-in-alt" />
+                         <div className="form-group">
+                           <div className="col-sm-6">
+                             <button className="btn btn-success" onClick={this.submitForm.bind(this)}>
+                               <FontAwesomeIcon className="mr-2" icon="sign-in-alt" />
                                Ingresar</button>
                            </div>
                         </div>
-                      </form>
+
                     </div>
                   </div>
                 </div>
             </div>
         </div>
-    )
-  }
+      )
+    }
 }
 
 export default Ingresar;
