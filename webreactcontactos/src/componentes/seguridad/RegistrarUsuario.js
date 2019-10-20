@@ -4,6 +4,7 @@ import {Redirect} from 'react-router-dom'
 import axios from  'axios';
  import AlertaSatisfactoria from '../../componentes/AlertaSatisfactoria';
  import AlertaError from '../../componentes/AlertaError';
+  import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class RegistrarUsuario extends Component{
   constructor(props){
@@ -75,40 +76,65 @@ class RegistrarUsuario extends Component{
           <div id="container" class="container">
 
               <div class="row">
-                  <div class="col-sm-10 offset-sm-1 text-center">
-                      <h1 class="display-5  my-5">Registrar</h1>
+                  <div class="col-sm-6 offset-sm-4 text-center">
+                      <h1 class="col-sm-6 display-5  my-4">Registrar</h1>
                       <div class="info-form">
+                          <form action="" class="form-inlin justify-content-center">
 
-                          <div class="form-group">
-                            <label htmlFor="nombreUsuario">Usuario: </label>
-                          <input type= "text" placeholder="Usuario" name="nombreUsuario" value={this.state.datosUsuario.Email} onChange={(e)=>{
-                            let {datosUsuario} = this.state;
-                            datosUsuario.Email = e.target.value;
-                            this.setState({datosUsuario});
-                          }} required="true" />
-                          </div>
+                            <div class="form-group">
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <div class="input-group-text bg-white">
 
-                        <div class="form-group">
-                          <label htmlFor="password">Password: </label>
-                          <input  type= "password" placeholder="Password" name="password" value={this.state.datosUsuario.Password} onChange={(e)=>{
-                            let {datosUsuario} = this.state;
-                            datosUsuario.Password = e.target.value;
-                            this.setState({datosUsuario});
-                          }}  required="true" maxlength="10" minlength="10"/>
+                                    <i>  <FontAwesomeIcon className="mr-1" icon="user-circle" /></i>
+                                  </div>
+                                </div>
+                                <input type= "text" placeholder="Usuario" name="nombreUsuario" value={this.state.datosUsuario.Email} onChange={(e)=>{
+                                  let {datosUsuario} = this.state;
+                                  datosUsuario.Email = e.target.value;
+                                  this.setState({datosUsuario});
+                                }} required="true" />
+                              </div>
+                            </div>
+
+                            <div class="form-group">
+                              <div class="input-group">
+                                 <div class="input-group-prepend">
+                                   <div class="input-group-text bg-white">
+                                     <i>  <FontAwesomeIcon className="mr-1" icon="key" /></i>
+                                   </div>
+                                 </div>
+                                  <input  type= "password" placeholder="Password" name="password" value={this.state.datosUsuario.Password} onChange={(e)=>{
+                                    let {datosUsuario} = this.state;
+                                    datosUsuario.Password = e.target.value;
+                                    this.setState({datosUsuario});
+                                  }}  required="true" maxlength="10" minlength="10"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                              <div class="input-group">
+                                 <div class="input-group-prepend">
+                                   <div class="input-group-text bg-white">
+                                     <i>  <FontAwesomeIcon className="mr-1" icon="key" /></i>
+                                   </div>
+                                 </div>
+                                  <input  type= "password" placeholder="Confirmar password" name="confirmarPassword" value={this.state.datosUsuario.ConfirmPassword} onChange={(e)=>{
+                                    let {datosUsuario} = this.state;
+                                    datosUsuario.ConfirmPassword = e.target.value;
+                                    this.setState({datosUsuario});
+                                  }}  required="true" maxlength="10" minlength="10"/>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                 <div class="col-sm-6">
+                                   <button class="btn btn-success" onClick={this.submitForm.bind(this)}>
+                                     <FontAwesomeIcon className="mr-1" icon="database" />
+                                     Guardar</button>
+                                </div>
+                              </div>
+                          </form>
                         </div>
-
-                          <div class="form-group">
-                            <label htmlFor="confirmarPassword">Confirmar password: </label>
-                            <input  type= "password" placeholder="Confirmar password" name="confirmarPassword" value={this.state.datosUsuario.ConfirmPassword} onChange={(e)=>{
-                              let {datosUsuario} = this.state;
-                              datosUsuario.ConfirmPassword = e.target.value;
-                              this.setState({datosUsuario});
-                            }}  required="true" maxlength="10" minlength="10"/>
-                          </div>
-
-                          <button class="btn btn-success" onClick={this.submitForm.bind(this)}>Guardar</button>
-
-                    </div>
                   </div>
     </div>
   </div>

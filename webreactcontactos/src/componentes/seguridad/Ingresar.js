@@ -4,6 +4,7 @@ import {Redirect} from 'react-router-dom'
  import axios from 'axios';
  import AlertaSatisfactoria from '../../componentes/AlertaSatisfactoria';
  import AlertaError from '../../componentes/AlertaError';
+ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class Ingresar extends Component{
   constructor(props){
@@ -62,38 +63,65 @@ class Ingresar extends Component{
           <div id="container" class="container">
 
               <div class="row">
-                  <div class="col-sm-10 offset-sm-1 text-center">
-                      <h1 class="display-5  my-5">Login</h1>
-                      <div class="info-form">
+                  <div class="col-sm-6 offset-sm-4 text-center">
+                      <h1 class="col-sm-6 display-5  my-4">Login</h1>
+                      <div class="info-form ">
+                        <form action="" class="form-inlin justify-content-center">
 
-                          <div class="form-group">
-                            <label htmlFor="Email">Usuario: </label>
-                          <input type= "text" placeholder="Usuario" name="Email" value={this.state.datosUsuario.Email} onChange={(e)=>{
-                            let {datosUsuario} = this.state;
-                            datosUsuario.Email = e.target.value;
-                            this.setState({datosUsuario});
-                          }} required="true"/>
+                            <div class="form-group">
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <div class="input-group-text bg-white">
+
+                                    <i>  <FontAwesomeIcon className="mr-1" icon="user-circle" /></i>
+                                  </div>
+                                </div>
+
+                                <input type= "text" placeholder="Usuario" name="Email" value={this.state.datosUsuario.Email} onChange={(e)=>{
+                                    let {datosUsuario} = this.state;
+                                    datosUsuario.Email = e.target.value;
+                                    this.setState({datosUsuario});
+                                  }} required="true"/>
+                            </div>
                           </div>
 
-                        <div class="form-group">
-                          <label htmlFor="Password">Password: </label>
-                        <input  type= "password" placeholder="Password" name="Password" value={this.state.datosUsuario.Password} onChange={(e)=>{
-                            let {datosUsuario} = this.state;
-                            datosUsuario.Password = e.target.value;
-                            this.setState({datosUsuario});
-                          }}  required="true"/>
+                          <div class="form-group">
+                            <div class="input-group">
+                               <div class="input-group-prepend">
+                                 <div class="input-group-text bg-white">
+                                   <i>  <FontAwesomeIcon className="mr-1" icon="key" /></i>
+                                 </div>
+                               </div>
+                                <input  type= "password" placeholder="Password" name="Password" value={this.state.datosUsuario.Password} onChange={(e)=>{
+                                    let {datosUsuario} = this.state;
+                                    datosUsuario.Password = e.target.value;
+                                    this.setState({datosUsuario});
+                                  }}  required="true"/>
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <div class="input-group">
+                              <div class="form-check">
+
+                                <input type="checkbox" name="RemenberMe"
+                                   class="form-check-input" value={this.state.datosUsuario.RemenberMe} onChange={(e)=>{
+                                       let {datosUsuario} = this.state;
+                                       datosUsuario.RemenberMe = e.target.value;
+                                       this.setState({datosUsuario});
+                                   }}/>
+                                   <label htmlFor="RemenberMe" class="form-check-label">Recordar sesión</label>
+                              </div>
+                          </div>
                         </div>
-
-                        <div class="form-group">
-                          <label htmlFor="RemenberMe">Recordar sesión: </label>
-                         <input  type="checkbox"  name="RemenberMe" value={this.state.datosUsuario.RemenberMe} onChange={(e)=>{
-                             let {datosUsuario} = this.state;
-                             datosUsuario.RemenberMe = e.target.value;
-                             this.setState({datosUsuario});
-                         }}/>
-                       </div>
-
-                       <button class="btn btn-success" onClick={this.submitForm.bind(this)}>Ingresar</button>
+                         <div class="form-group">
+                           <div class="col-sm-6">
+                             <button class="btn btn-success" onClick={this.submitForm.bind(this)}>
+                               <FontAwesomeIcon className="mr-1" icon="sign-in-alt" />
+                               Ingresar</button>
+                           </div>
+                        </div>
+                      </form>
                     </div>
                   </div>
                 </div>
