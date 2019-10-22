@@ -22,9 +22,9 @@ class RegistrarUsuario extends Component{
         ConfirmPassword: ''
       },
       loggedIn,
-      isNullEmail: true,
-      isNullPassword: true,
-      isNullComfirmPassword: true
+      isNullEmail: '',
+      isNullPassword: '',
+      isNullComfirmPassword: ''
     }
   }
   ingresoUsuario()
@@ -53,37 +53,38 @@ class RegistrarUsuario extends Component{
      {
        this.setState({
          alert_message: 'Introduzca los datos que se le solicitan',
-         isNullEmail: true,
-         isNullPassword: true,
-         isNullComfirmPassword: true
+         isNullEmail: 'true',
+         isNullPassword: 'true',
+         isNullComfirmPassword: 'true'
        });
        return false;
      }
-     if (this.state.datosUsuario.Password != this.state.datosUsuario.ConfirmPassword)
-     {
-       this.setState({
-         alert_message: 'El password y la confirmación del password deben ser indenticos',
-         isNullPassword: true,
-         isNullComfirmPassword: true
-       });
-       return false;
-     }
+
      if (this.state.datosUsuario.Password.length < 10)
      {
        this.setState({
          alert_message: 'El password debe tener diez caracteres',
-         isNullPassword: true,
+         isNullPassword: 'true',
        });
         return false;
      }
-      if (this.state.datosUsuario.ConfirmPassword.length < 10)
-      {
-        this.setState({
-          alert_message: 'La confirmación del password debe tener diez caracteres',
-          isNullComfirmPassword: true,
-        });
-         return false;
-      }
+    if (this.state.datosUsuario.ConfirmPassword.length < 10)
+    {
+      this.setState({
+        alert_message: 'La confirmación del password debe tener diez caracteres',
+        isNullComfirmPassword: 'true',
+      });
+       return false;
+    }
+    if (this.state.datosUsuario.Password != this.state.datosUsuario.ConfirmPassword)
+    {
+      this.setState({
+        alert_message: 'El password y la confirmación del password deben ser indenticos',
+        isNullPassword: 'true',
+        isNullComfirmPassword: 'true'
+      });
+      return false;
+    }
      return true;
 
   }
@@ -103,6 +104,16 @@ class RegistrarUsuario extends Component{
             });
       });
     }
+}
+
+validacionBoton(e){
+  if (e == 'true'){
+    return 'red-icon'
+  }
+  if (e == 'false'){
+    return 'green-icon'
+  }
+  return '';
 }
 
 render(){
@@ -127,10 +138,10 @@ render(){
                             <div className="input-group">
                               <div className="input-group-prepend">
                                 <div className="input-group-text bg-white">
-                                  <i className= {(this.state.isNullEmail?'red-icon':'green-icon')}>  <FontAwesomeIcon className="mr-1" icon="user-circle" /></i>
+                                  <i className= {this.validacionBoton(this.state.isNullEmail)}>  <FontAwesomeIcon className="mr-1" icon="user-circle" /></i>
                                 </div>
                               </div>
-                              <input className="form-control" type= "text" placeholder="Usuario" name="nombreUsuario" value={this.state.datosUsuario.Email} onChange={(e)=>{
+                              <input type="email" className="form-control" type= "text" placeholder="Usuario" name="nombreUsuario" value={this.state.datosUsuario.Email} onChange={(e)=>{
                                 let {datosUsuario} = this.state;
                                 datosUsuario.Email = e.target.value;
                                 this.setState({datosUsuario});
@@ -139,9 +150,9 @@ render(){
                                 let {isNullEmail} = this.state;
                                 if (e.target.value == '')
                                   {
-                                    this.setState({isNullEmail: true});
+                                    this.setState({isNullEmail: 'true'});
                                   }else {
-                                    this.setState({isNullEmail: false, alert_message: ''});
+                                    this.setState({isNullEmail: 'false', alert_message: ''});
                                   }
                                 }} />
                             </div>
@@ -151,7 +162,7 @@ render(){
                             <div className="input-group">
                                <div className="input-group-prepend">
                                  <div className="input-group-text bg-white">
-                                   <i className= {(this.state.isNullPassword?'red-icon':'green-icon')}>  <FontAwesomeIcon className="mr-1" icon="key" /></i>
+                                   <i className= {this.validacionBoton(this.state.isNullPassword)}>  <FontAwesomeIcon className="mr-1" icon="key" /></i>
                                  </div>
                                </div>
                                 <input className="form-control" type= "password" placeholder="Password" name="password" value={this.state.datosUsuario.Password} onChange={(e)=>{
@@ -163,9 +174,9 @@ render(){
                                   let {isNullPassword} = this.state;
                                   if (e.target.value == '')
                                     {
-                                      this.setState({isNullPassword: true});
+                                      this.setState({isNullPassword: 'true'});
                                     }else {
-                                      this.setState({isNullPassword: false, alert_message: ''});
+                                      this.setState({isNullPassword: 'false', alert_message: ''});
                                     }
                                   }}/>
                               </div>
@@ -175,7 +186,7 @@ render(){
                             <div className="input-group">
                                <div className="input-group-prepend">
                                  <div className="input-group-text bg-white">
-                                   <i className= {(this.state.isNullComfirmPassword?'red-icon':'green-icon')}>  <FontAwesomeIcon className="mr-1" icon="key" /></i>
+                                   <i className= {this.validacionBoton(this.state.isNullComfirmPassword)}>  <FontAwesomeIcon className="mr-1" icon="key" /></i>
                                  </div>
                                </div>
                                 <input className="form-control" type= "password" placeholder="Confirmar password" name="confirmarPassword" value={this.state.datosUsuario.ConfirmPassword} onChange={(e)=>{
@@ -187,9 +198,9 @@ render(){
                                   let {isNullComfirmPassword} = this.state;
                                   if (e.target.value == '')
                                     {
-                                      this.setState({isNullComfirmPassword: true});
+                                      this.setState({isNullComfirmPassword: 'true'});
                                     }else {
-                                      this.setState({isNullComfirmPassword: false, alert_message: ''});
+                                      this.setState({isNullComfirmPassword: 'false', alert_message: ''});
                                     }
                                   }}/>
                               </div>

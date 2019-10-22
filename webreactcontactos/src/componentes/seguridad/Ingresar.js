@@ -22,8 +22,8 @@ class Ingresar extends Component{
         RemenberMe: false
       },
       loggedIn,
-      isNullEmail: true,
-      isNullPassword: true
+      isNullEmail: '',
+      isNullPassword: ''
     }
   }
   validacionControles() {
@@ -31,8 +31,8 @@ class Ingresar extends Component{
     {
       this.setState({
         alert_message: 'Introduzca el usuario y el password',
-        isNullEmail: true,
-        isNullPassword: true
+        isNullEmail: 'true',
+        isNullPassword: 'true'
       });
       return false;
     }
@@ -40,7 +40,7 @@ class Ingresar extends Component{
     {
       this.setState({
         alert_message: 'El password debe tener diez caracteres',
-        isNullPassword: true,
+        isNullPassword: 'true',
       });
        return false;
     }
@@ -76,6 +76,16 @@ class Ingresar extends Component{
 
 }
 
+validacionBoton(e){
+  if (e == 'true'){
+    return 'red-icon'
+  }
+  if (e == 'false'){
+    return 'green-icon'
+  }
+  return '';
+}
+
   render(){
     if (this.state.loggedIn===true){
       //Otra forma de hacer redirect
@@ -97,10 +107,10 @@ class Ingresar extends Component{
                               <div className="input-group">
                                 <div className="input-group-prepend">
                                   <div className="input-group-text bg-white">
-                                    <i className= {(this.state.isNullEmail?'red-icon':'green-icon')}>  <FontAwesomeIcon className="mr-1" icon="user-circle" /></i>
+                                    <i className= {this.validacionBoton(this.state.isNullEmail)}>  <FontAwesomeIcon className="mr-1" icon="user-circle" /></i>
                                   </div>
                                 </div>
-                                <input className="form-control" type= "text" placeholder="Usuario" name="Email" value={this.state.datosUsuario.Email} onChange={(e)=>{
+                                <input type="email" className="form-control" type= "text" placeholder="Usuario" name="Email" value={this.state.datosUsuario.Email} onChange={(e)=>{
                                     let {datosUsuario} = this.state;
                                     datosUsuario.Email = e.target.value;
                                     this.setState({datosUsuario});
@@ -108,9 +118,9 @@ class Ingresar extends Component{
                                     let {isNullEmail} = this.state;
                                     if (e.target.value == '')
                                       {
-                                        this.setState({isNullEmail: true});
+                                        this.setState({isNullEmail: 'true'});
                                       }else {
-                                        this.setState({isNullEmail: false, alert_message: ''});
+                                        this.setState({isNullEmail: 'false', alert_message: ''});
                                       }
                                     }}/>
                             </div>
@@ -119,7 +129,7 @@ class Ingresar extends Component{
                             <div className="input-group">
                                <div className="input-group-prepend">
                                  <div className="input-group-text bg-white">
-                                   <i className= {(this.state.isNullPassword?'red-icon':'green-icon')}>  <FontAwesomeIcon className="mr-1" icon="key" /></i>
+                                   <i className= {this.validacionBoton(this.state.isNullPassword)}>  <FontAwesomeIcon className="mr-1" icon="key" /></i>
                                  </div>
                                </div>
                                 <input  className="form-control" type= "password" placeholder="Password" name="Password" value={this.state.datosUsuario.Password} onChange={(e)=>{
@@ -130,9 +140,9 @@ class Ingresar extends Component{
                                     let {isNullPassword} = this.state;
                                     if (e.target.value == '')
                                       {
-                                        this.setState({isNullPassword: true});
+                                        this.setState({isNullPassword: 'true'});
                                       }else {
-                                        this.setState({isNullPassword: false, alert_message: ''});
+                                        this.setState({isNullPassword: 'false', alert_message: ''});
                                       }
                                     }}/>
                             </div>
