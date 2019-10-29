@@ -29,7 +29,6 @@ class RegistrarUsuario extends Component{
   }
   ingresoUsuario()
   {
-
       axios.post('https://localhost:44328/api/Usuarios/Ingresar', this.state.datosUsuario).then((response)=>{
       //Se genera el token
       localStorage.setItem("token", "jasdajalkcecklwcljekwej");
@@ -86,7 +85,6 @@ class RegistrarUsuario extends Component{
       return false;
     }
      return true;
-
   }
 
   submitForm()
@@ -98,7 +96,6 @@ class RegistrarUsuario extends Component{
           this.ingresoUsuario();
           //Se inicializan la variable editarContactoModal y el objeto de datosEditarContacto
         }).catch(error=>{
-
             this.setState({
               alert_message: 'No se pudo registrar el usuario'
             });
@@ -120,13 +117,12 @@ render(){
   if (this.state.loggedIn===true){
     //Otra forma de hacer redirect
     // this.props.history.push("/")
-    //return <Redirect  to="/" />
-    window.location.href='/';
+    return <Redirect  to="/" />
   }
   return (
 
     <div id="cover-caption">
-      <hr/>
+
         {this.state.alert_message!=""?<AlertaError mensaje={this.state.alert_message} />:null}
         <div id="container" className="container">
 

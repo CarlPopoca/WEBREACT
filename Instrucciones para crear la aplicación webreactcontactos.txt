@@ -38,6 +38,14 @@ Instale react-router-dom:
 
 	npm install --save react-router-dom
 
+Instale react-bootstrap:
+
+	npm install --save react-bootstrap
+
+Agregue react-bootstrap:
+
+	yarn add react-bootstrap
+
 Agregue react-router-dom:
 
 	yarn add react-router-dom

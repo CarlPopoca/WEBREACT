@@ -56,7 +56,6 @@ class Navegacion extends Component  {
                         <li class="nav-item">
                             <a class="nav-link text-dark" href="/contactos">Contactos</a>
                         </li>
-
                     </ul>
                     <ul class="navbar-nav ml-auto">
 

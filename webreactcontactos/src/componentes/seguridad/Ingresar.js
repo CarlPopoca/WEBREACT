@@ -90,13 +90,13 @@ validacionBoton(e){
     if (this.state.loggedIn===true){
       //Otra forma de hacer redirect
       // this.props.history.push("/")
-      //return <Redirect  to="/" />
-      window.location.href='/';
+      return <Redirect  to="/" />
+      //  window.location.href='/';
     }
     return (
 
       <div id="cover-caption">
-        <hr/>
+      
           {this.state.alert_message!=""?<AlertaError mensaje={this.state.alert_message} />:null}
           <div id="container" className="container">
               <div className="row">
