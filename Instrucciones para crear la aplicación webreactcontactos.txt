@@ -20,35 +20,9 @@ directorio de la aplicación:
 
 *****Comandos para la configuración de la aplicación********
 
-Posicionese en la carpeta del código de la aplicación y ejecute los siguientes comandos.
+Posicionese en la carpeta del código de la aplicación y ejecute los siguientes comandos:
 
-Instale reactstrap y sus dependencias:
-
-	npm install --save reactstrap react react-dom
-
-Instale bootstrap:
-
-	npm install --save bootstrap
-
-Agregue bootstrap y reactstrap:
-
-	yarn add bootstrap reactstrap
-
-Instale react-router-dom:
-
-	npm install --save react-router-dom
-
-Instale react-bootstrap:
-
-	npm install --save react-bootstrap
-
-Agregue react-bootstrap:
-
-	yarn add react-bootstrap
-
-Agregue react-router-dom:
-
-	yarn add react-router-dom
+	yarn add react react-dom react-router-dom react-bootstrap bootstrap reactstrap axios react-confirm-alert
 
 Agregue las siguientes librerias para iconos de forawesome:
 
@@ -66,9 +40,5 @@ Importe componentes de reactstrap  en el archivo src/App.js, ejemplo:
 	import { Table, Button} from 'reactstrap';
 
 	Nota: Si quiere conocer más acerca de estos comando vaya a la página https://reactstrap.github.io/ 
-
-Agregue axios:
-
-	yarn add axios
 
 

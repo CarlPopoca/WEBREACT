@@ -3,11 +3,14 @@ import {Label, FormGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, Tab
 import { Link, Redirect} from 'react-router-dom';
 import axios from 'axios';
 import { confirmAlert } from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import AlertaError from './AlertaError';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
 /*import Navegacion from './Navegacion';*/
 //Una Clase que extiende del component de React se comvierte en una etiqueta html
 class Contactos extends Component  {
+
   constructor(props){
     super(props);
     const token = localStorage.getItem("token");
@@ -17,7 +20,12 @@ class Contactos extends Component  {
     }
     this.state = {
       contactos: [],
-      datosNuevoContacto: {
+		isError:'',
+		isNullNombre: '',
+		isNullCelular: '',
+		isNullSexo: '',
+		alert_message:'',
+		datosNuevoContacto: {
         Nombre: '',
         Celular: '',
         Sexo: ''
@@ -50,7 +58,12 @@ class Contactos extends Component  {
 //cuando se pulsa el botón de cancelar
   toggleNuevoContactoModal() {
     this.setState({
-      nuevoContactoModal: !this.state.nuevoContactoModal,
+	  isError:'',
+      isNullNombre:'',
+      isNullCelular:'',
+      isNullSexo:'',
+      alert_message:'',
+	  nuevoContactoModal: !this.state.nuevoContactoModal,
       datosNuevoContacto: {
         Nombre: '',
         Celular: '',
@@ -69,52 +82,114 @@ class Contactos extends Component  {
     editarContactoModal: !this.state.editarContactoModal
   });
 }
+validacionInput(e){
+
+  if (e === 'true'){
+    return {borderColor: '#dc3545'}
+  }
+  if (e === 'false'){
+    return  {borderColor: '#28a745'}
+  }
+  return  {borderColor: 'none'};
+}
+
+validarContacto(contacto) {
+  var nombre='false', celular='false', sexo='false', alert='', valAlert=false, valContacto= true;
+
+  if (contacto.Nombre ==='')
+  {
+    nombre ='true';
+    valAlert=true;
+  }
+
+  if (contacto.Celular ==='')
+  {
+    celular = 'true';
+    valAlert=true;
+  }
+
+  if (contacto.Sexo ==='')
+  {
+    sexo = 'true';
+    valAlert=true;
+  }
+
+  if (valAlert) {
+    alert = 'Introduzca la información que se le solicita'
+    valContacto = false;
+  }
+  this.setState({
+    isError:'',
+    isNullNombre: nombre,
+    isNullCelular: celular,
+    isNullSexo: sexo,
+    alert_message: alert
+  });
+
+  return valContacto;
+}
 //Método que permite guardar los datos capturados en el modal de Alta
   agregarContacto (){
-
-    axios.post('https://localhost:44386/api/Contactos', this.state.datosNuevoContacto).then((response)=>{
-    //Se setea la variable de state contactos, los simbolo {} permiten usarla para setearla por medio de let
-    //this.state contiene los contactos que se renderizaron en el Table
-      let {contactos} = this.state;
-      //Se agrega al final el contacto que devolvio el metodo post de la api contactos
-      contactos.push(response.data);
-      //Inicializa el estado de las variables nuevoContactoModal y el objeto datosNuevoContacto
-      this.setState({contactos, nuevoContactoModal:false, datosNuevoContacto: {
-        Nombre: '',
-        Celular: '',
-        Sexo: ''
-      }});
-
-    });
+	if (this.validarContacto(this.state.datosNuevoContacto)) {
+		axios.post('https://localhost:44386/api/Contactos', this.state.datosNuevoContacto).then((response)=>{
+		//Se setea la variable de state contactos, los simbolo {} permiten usarla para setearla por medio de let
+		//this.state contiene los contactos que se renderizaron en el Table
+		  let {contactos} = this.state;
+		  //Se agrega al final el contacto que devolvio el metodo post de la api contactos
+		  contactos.push(response.data);
+		  //Inicializa el estado de las variables nuevoContactoModal y el objeto datosNuevoContacto
+		  this.setState({contactos, nuevoContactoModal:false, datosNuevoContacto: {
+			Nombre: '',
+			Celular: '',
+			Sexo: ''
+		  }});
+		}).catch(error=>{
+        //entra cuando los errores se propagan desde la base de datos, por ejemplo cuando la logitud de un
+        //  es superior al campo de la base de datos
+        this.setState({
+          isError:'true',
+          alert_message: 'No se pudo agregar el contacto'
+        });
+      });
+	   }
   }
 
 //Método que permite guardar los datos capturados en el modal de Modificación
   actualizarContacto()
   {
     let {Id, Nombre, Celular, Sexo} = this.state.datosEditarContacto;
+	if (this.validarContacto(this.state.datosEditarContacto)) {
+		  axios.put('https://localhost:44386/api/Contactos/' + this.state.datosEditarContacto.Id, {
+		  Id, Nombre, Celular, Sexo
+			}).then((response)=>{
+		  //Se refresca el Table
+  		  this.refrescarContactos();
+  		  //Se inicializan la variable editarContactoModal y el objeto de datosEditarContacto
+  		  this.setState({editarContactoModal: false, datosEditarContacto: {
 
-      axios.put('https://localhost:44386/api/Contactos/' + this.state.datosEditarContacto.Id, {
-      Id, Nombre, Celular, Sexo
-    }).then((response)=>{
-      //Se refresca el Table
-      this.refrescarContactos();
-      //Se inicializan la variable editarContactoModal y el objeto de datosEditarContacto
-      this.setState({editarContactoModal: false, datosEditarContacto: {
-            Id: '',
-            Nombre: '',
-            Celular: '',
-            Sexo: ''
-        }});
-    });
+  				Id: '',
+  				Nombre: '',
+  				Celular: '',
+  				Sexo: ''
+  			}});
+		   }).catch(error=>{
+        //entra cuando los errores se propagan desde la base de datos, por ejemplo cuando la logitud de un
+        //  es superior al campo de la base de datos
+        this.setState({
+          isError:'true',
+          alert_message: 'No se pudo actualizar el contacto'
+        });
+      });
+
+	}
   }
+
 //Método para eliminar un Contacto
  eliminarContacto(id){
-
    confirmAlert({
     customUI: ({ onClose }) => {
       return (
         <div className='custom-ui'>
-
           <h1 className="glyphicon glyphicon-warning-sign">
             <FontAwesomeIcon className="mr-3" icon="exclamation-triangle" />
             Esta seguro de eliminar el registro?</h1>
@@ -128,9 +203,16 @@ class Contactos extends Component  {
               <Button color="primary" size="sm" className="btn btn-default "
                   onClick={() => {
                     axios.delete('https://localhost:44386/api/Contactos/'+id).then((response)=>{
-                       this.refrescarContactos();
-                       onClose();
-                     });
+						              this.refrescarContactos();
+                          onClose();
+                     }).catch(error=>{
+                        //entra cuando los errores se propagan desde la base de datos, por ejemplo cuando la logitud de un
+                        //  es superior al campo de la base de datos
+                        this.setState({
+                          isError:'true',
+                          alert_message: 'No se pudo eliminar el contacto'
+                        });
+                      });
                   }}
                 >
                   <FontAwesomeIcon className="mr-1" icon="check" />
@@ -144,7 +226,7 @@ class Contactos extends Component  {
       }
     });
  }
-  refrescarContactos(){
+ refrescarContactos(){
     axios.get('https://localhost:44386/api/Contactos').then((response)=>{
       this.setState({
         contactos: response.data
@@ -159,9 +241,18 @@ class Contactos extends Component  {
   {
     //Por default la variable editarContactoModal es false pero se niega este valor seteando a verdadero,
     // y de esta manera se consigue visualizar el modal de mdificación y setearle los datos a los controles
+	this.validarContacto({Id, Nombre, Celular, Sexo});
     this.setState({
      datosEditarContacto: {Id, Nombre, Celular, Sexo}, editarContactoModal:! this.state.editarContactoModal
    });
+  }
+
+  validacionControles()
+  {
+    if (((this.state.isNullNombre ==='true'||this.state.isNullCelular ==='true'||this.state.isNullSexo ==='true') && (this.state.alert_message!='')) ||(this.state.isError=== 'true'))
+      return true;
+    else
+      return false;
   }
 
   render(){
@@ -172,6 +263,7 @@ class Contactos extends Component  {
     //Se setea a la variable local contactosReg el objeto contactos que se lleno al ejecutarse el método
     //componentWillMount en automatico y se retorna las filas del Table más una columna con los botones de
     //Editar y eliminar
+
     let contactosReg = this.state.contactos.map((contacto)=>{
       return(
         <tr key={contacto.Id}>
@@ -207,7 +299,7 @@ class Contactos extends Component  {
     // this.setState({datosNuevoContacto});, se confirma el seteo de la propiedad del objeto
 
     //<tbody>{contactosReg}</tbody>, la variable local contactosReg proporciona los filas del Table
-    return (
+	  return (
       <div id="divContactos">
 
       <div className="App container">
@@ -217,29 +309,52 @@ class Contactos extends Component  {
         <Modal isOpen={this.state.nuevoContactoModal}  toggle={this.toggleNuevoContactoModal.bind(this)}>
           <ModalHeader toggle={this.toggleNuevoContactoModal.bind(this)}>Agregar un Contacto</ModalHeader>
           <ModalBody>
+            {this.validacionControles()?<AlertaError mensaje={this.state.alert_message} />:null}
             <FormGroup>
               <Label for="Nombre">Nombre</Label>
-              <Input  id="Nombre" value={this.state.datosNuevoContacto.Nombre} onChange={(e)=>{
+            <Input  id="Nombre" style={this.validacionInput(this.state.isNullNombre)} value={this.state.datosNuevoContacto.Nombre} onChange={(e)=>{
                 let {datosNuevoContacto} = this.state;
                 datosNuevoContacto.Nombre = e.target.value;
                 this.setState({datosNuevoContacto});
-              }}/>
+              }} required="true" maxlength="100" onKeyUp onBlur={(e)=>{
+                if (e.target.value == '')
+                  {
+                    this.setState({isNullNombre: 'true'});
+                  }else {
+                    this.setState({isNullNombre: 'false'});
+                  }
+                }}/>
             </FormGroup>
             <FormGroup>
               <Label for="Celular">Celular</Label>
-              <Input  id="Celular" value={this.state.datosNuevoContacto.Celular} onChange={(e)=>{
+              <Input  id="Celular" style={this.validacionInput(this.state.isNullCelular)} value={this.state.datosNuevoContacto.Celular} onChange={(e)=>{
+                var regex = /[^+\d]/g;
                 let {datosNuevoContacto} = this.state;
-                datosNuevoContacto.Celular = e.target.value;
+                datosNuevoContacto.Celular = e.target.value.replace(regex,"");
                 this.setState({datosNuevoContacto});
-              }}/>
+              }} required = "true"  onBlur={(e)=>{
+                if (e.target.value == '')
+                  {
+                    this.setState({isNullCelular: 'true'});
+                  }else {
+                    this.setState({isNullCelular: 'false'});
+                  }
+                }}/>
             </FormGroup>
             <FormGroup>
               <Label for="Sexo">Sexo</Label>
-              <Input  id="Sexo" value={this.state.datosNuevoContacto.Sexo} onChange={(e)=>{
+              <Input  id="Sexo" style={this.validacionInput(this.state.isNullSexo)} value={this.state.datosNuevoContacto.Sexo} onChange={(e)=>{
                 let {datosNuevoContacto} = this.state;
                 datosNuevoContacto.Sexo = e.target.value;
                 this.setState({datosNuevoContacto});
-              }}/>
+              }} required="true" maxlength="3" minlength="3" onBlur={(e)=>{
+                if (e.target.value == '')
+                  {
+                    this.setState({isNullSexo: 'true'});
+                  }else {
+                    this.setState({isNullSexo: 'false'});
+                  }
+                }}/>
             </FormGroup>
           </ModalBody>
          <ModalFooter>
@@ -251,29 +366,52 @@ class Contactos extends Component  {
         <Modal isOpen={this.state.editarContactoModal}  toggle={this.toggleEditarContactoModal.bind(this)}>
          <ModalHeader toggle={this.toggleEditarContactoModal.bind(this)}>Editar un Contacto</ModalHeader>
          <ModalBody>
+           {this.validacionControles()?<AlertaError mensaje={this.state.alert_message} />:null}
           <FormGroup>
             <Label for="Nombre">Nombre</Label>
-            <Input  id="Nombre" value={this.state.datosEditarContacto.Nombre} onChange={(e)=>{
+            <Input  id="Nombre"  style={this.validacionInput(this.state.isNullNombre)} value={this.state.datosEditarContacto.Nombre} onChange={(e)=>{
               let {datosEditarContacto} = this.state;
               datosEditarContacto.Nombre = e.target.value;
               this.setState({datosEditarContacto});
-            }}/>
+            }} required="true" maxlength="100" onBlur={(e)=>{
+              if (e.target.value == '')
+                {
+                  this.setState({isNullNombre: 'true'});
+                }else {
+                  this.setState({isNullNombre: 'false'});
+                }
+              }}/>
           </FormGroup>
           <FormGroup>
             <Label for="Celular">Celular</Label>
-            <Input  id="Celular" value={this.state.datosEditarContacto.Celular} onChange={(e)=>{
+            <Input  id="Celular" style={this.validacionInput(this.state.isNullCelular)} value={this.state.datosEditarContacto.Celular} onChange={(e)=>{
+              var regex = /[^+\d]/g;
               let {datosEditarContacto} = this.state;
-              datosEditarContacto.Celular = e.target.value;
+              datosEditarContacto.Celular = e.target.value.replace(regex,"");
               this.setState({datosEditarContacto});
-            }}/>
+            }} required="true" onBlur={(e)=>{
+              if (e.target.value == '')
+                {
+                  this.setState({isNullCelular: 'true'});
+                }else {
+                  this.setState({isNullCelular: 'false'});
+                }
+              }}/>
           </FormGroup>
           <FormGroup>
             <Label for="Sexo">Sexo</Label>
-            <Input  id="Sexo" value={this.state.datosEditarContacto.Sexo} onChange={(e)=>{
+          <Input  id="Sexo" style={this.validacionInput(this.state.isNullSexo)} value={this.state.datosEditarContacto.Sexo} onChange={(e)=>{
               let {datosEditarContacto} = this.state;
               datosEditarContacto.Sexo = e.target.value;
               this.setState({datosEditarContacto});
-            }}/>
+            }} required="true"  maxlength="3" minlength="3" onBlur={(e)=>{
+              if (e.target.value == '')
+                {
+                  this.setState({isNullSexo: 'true'});
+                }else {
+                  this.setState({isNullSexo: 'false'});
+                }
+              }}/>
           </FormGroup>
         </ModalBody>
         <ModalFooter>
