@@ -1,8 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import {Redirect} from 'react-router-dom'
-import { withRouter } from 'react-router';
 import axios from  'axios';
-import AlertaSatisfactoria from '../../componentes/AlertaSatisfactoria';
 import AlertaError from '../../componentes/AlertaError';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -35,19 +33,21 @@ class RegistrarUsuario extends Component{
       //Se setea que ingreso
       this.setState({
         loggedIn: true,
-        alert_message: ''
-      });
-      //Se inicializan la variable editarContactoModal y el objeto de datosEditarContacto
-      this.setState({datosUsuario: {
-        Email: '',
-        Password: '',
-        ConfirmPassword: ''
-          }});
+        alert_message: '',
+        datosUsuario: {
+          Email: '',
+          Password: '',
+          ConfirmPassword: ''
+            }
         });
+      }).catch(error=>{
+          this.setState({
+            alert_message: 'El usuario no pudo ingresar'
+          });
+    });
   }
 
    validacionControles() {
-
      if (this.state.datosUsuario.Email=='' && this.state.datosUsuario.Password=='' && this.state.datosUsuario.ConfirmPassword=='')
      {
        this.setState({
@@ -92,9 +92,7 @@ class RegistrarUsuario extends Component{
     let valControles = this.validacionControles();
     if (valControles){
           axios.post('https://localhost:44328/api/Usuarios/Registrar', this.state.datosUsuario).then((response)=>{
-          //Se refresca el Table
           this.ingresoUsuario();
-          //Se inicializan la variable editarContactoModal y el objeto de datosEditarContacto
         }).catch(error=>{
             this.setState({
               alert_message: 'No se pudo registrar el usuario'
@@ -120,12 +118,9 @@ render(){
     return <Redirect  to="/" />
   }
   return (
-
     <div id="cover-caption">
-
         {this.state.alert_message!=""?<AlertaError mensaje={this.state.alert_message} />:null}
         <div id="container" className="container">
-
             <div className="row">
                 <div className="col-sm-6 offset-sm-4 text-center">
                     <h1 className="col-sm-7 display-5  my-4">Registrar</h1>

@@ -1,13 +1,11 @@
 import React, {Component, Fragment} from 'react';
 import {BrowserRouter as Routers, Link, Switch, Route, withRouter } from 'react-router-dom';
-import Ingresar from './componentes/seguridad/Ingresar';
+import IniciarSesion from './componentes/seguridad/IniciarSesion';
 import CerrarSesion from './componentes/seguridad/CerrarSesion';
 import RegistrarUsuario from './componentes/seguridad/RegistrarUsuario';
 import Contactos from './componentes/Contactos';
-import Navegacion from './componentes/Navegacion';
 import NavMenu from './componentes/NavMenu';
 import Home from './componentes/Home';
-import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import logo from './logo.svg';
 import './App.css';
@@ -32,7 +30,7 @@ class App extends Component  {
                 <Fragment>
                   <NavMenu location={this.props.location}></NavMenu>
                   <Route exact path="/" component={Home}></Route>
-                  <Route path="/ingresar" component={Ingresar}></Route>
+                  <Route path="/iniciarSesion" component={IniciarSesion}></Route>
                   <Route path="/registrarUsuario" component={RegistrarUsuario}></Route>
                   <Route path="/contactos" component={Contactos}></Route>
                   <Route path="/cerrarSesion" component={CerrarSesion}></Route>

@@ -53,7 +53,7 @@ changeNavItem(currentRoute){
        var letLogin = (
          <Fragment>
              <NavItem>
-               <NavLink href="/ingresar">Ingresar</NavLink>
+               <NavLink href="/iniciarSesion">Ingresar</NavLink>
              </NavItem>
              <NavItem>
                <NavLink href="/registrarUsuario">Registrar Usuario</NavLink>

@@ -1,12 +1,10 @@
 import React, {Component, Fragment} from 'react'
 import {Redirect} from 'react-router-dom'
- import { withRouter } from 'react-router';
- import axios from 'axios';
- import AlertaSatisfactoria from '../../componentes/AlertaSatisfactoria';
- import AlertaError from '../../componentes/AlertaError';
- import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
+import AlertaError from '../AlertaError';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-class Ingresar extends Component{
+class IniciarSesion extends Component{
   constructor(props){
     super(props);
     const token = localStorage.getItem("token");
@@ -49,7 +47,6 @@ class Ingresar extends Component{
 
   submitForm()
   {
-
     let valControles = this.validacionControles();
     if (valControles){
       axios.post('https://localhost:44328/api/Usuarios/Ingresar', this.state.datosUsuario).then((response)=>{
@@ -58,14 +55,13 @@ class Ingresar extends Component{
         //Se setea que ingreso
         this.setState({
           loggedIn: true,
-          alert_message: ''
+          alert_message: '',
+          datosUsuario: {
+            Email: '',
+            Password: '',
+            RemenberMe: false
+              }
         });
-        //Se inicializan la variable editarContactoModal y el objeto de datosEditarContacto
-        this.setState({datosUsuario: {
-          Email: '',
-          Password: '',
-          RemenberMe: false
-            }});
         }).catch(error=>{
 
             this.setState({
@@ -73,7 +69,6 @@ class Ingresar extends Component{
             });
       });
     }
-
 }
 
 validacionBoton(e){
@@ -94,14 +89,12 @@ validacionBoton(e){
       //  window.location.href='/';
     }
     return (
-
       <div id="cover-caption">
-      
           {this.state.alert_message!=""?<AlertaError mensaje={this.state.alert_message} />:null}
           <div id="container" className="container">
               <div className="row">
                   <div className="col-sm-6 offset-sm-4 text-center">
-                    <h1 className="col-sm-7 display-5  my-4">Login</h1>
+                    <h1 className="col-sm-7 display-5  my-4">Iniciar sesión</h1>
                     <div className="info-form col-sm-7">
                             <div className="form-group">
                               <div className="input-group">
@@ -174,4 +167,4 @@ validacionBoton(e){
     }
 }
 
-export default Ingresar;
+export default IniciarSesion;
