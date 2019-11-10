@@ -12,7 +12,7 @@ import './App.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import MDSpinner from "react-md-spinner";
-import { faCheckSquare, faCoffee, faTrashAlt, faExclamationTriangle, faTimes, faCheck, faUserCircle, faKey, faSignInAlt, faDatabase, faSyncAlt, faSpinner} from '@fortawesome/free-solid-svg-icons';
+import { faCheckSquare, faCoffee, faTrashAlt, faExclamationTriangle, faTimes, faCheck, faUserCircle, faKey, faSignInAlt, faDatabase, faSyncAlt} from '@fortawesome/free-solid-svg-icons';
 
 //Una Clase que extiende del component de React se comvierte en una etiqueta html
 class App extends Component  {
@@ -29,7 +29,7 @@ class App extends Component  {
     this.setState({isLoading:false});
   }
   render(){
-    library.add(fab, faCheckSquare, faCoffee, faTrashAlt, faExclamationTriangle, faTimes, faCheck, faUserCircle, faKey, faSignInAlt, faDatabase, faSyncAlt, faSpinner);
+    library.add(fab, faCheckSquare, faCoffee, faTrashAlt, faExclamationTriangle, faTimes, faCheck, faUserCircle, faKey, faSignInAlt, faDatabase, faSyncAlt);
     if (this.state.isLoading){
       return  <MDSpinner className="spinner" size={50}/>
     }
