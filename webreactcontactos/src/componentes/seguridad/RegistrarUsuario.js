@@ -13,6 +13,7 @@ class RegistrarUsuario extends Component{
       loggedIn = false;
     }
     this.state = {
+      loading: false,
       alert_message:'',
       datosUsuario: {
         Email: '',
@@ -91,12 +92,18 @@ class RegistrarUsuario extends Component{
   {
     let valControles = this.validacionControles();
     if (valControles){
-          axios.post('https://localhost:44328/api/Usuarios/Registrar', this.state.datosUsuario).then((response)=>{
+      this.setState({
+        loading: true
+      });
+      axios.post('https://localhost:44328/api/Usuarios/Registrar', this.state.datosUsuario).then((response)=>{
           this.ingresoUsuario();
-        }).catch(error=>{
+          this.setState({
+            loading: false});
+      }).catch(error=>{
             this.setState({
+              loading: false,
               alert_message: 'No se pudo registrar el usuario'
-            });
+          });
       });
     }
 }
@@ -112,6 +119,7 @@ validacionBoton(e){
 }
 
 render(){
+  const {loading} = this.state;
   if (this.state.loggedIn===true){
     //Otra forma de hacer redirect
     // this.props.history.push("/")
@@ -198,7 +206,7 @@ render(){
                             </div>
                             <div className="form-group">
                                  <button className="btn btn-success" onClick={this.submitForm.bind(this)}>
-                                   <FontAwesomeIcon className="mr-1" icon="database" />
+                                 {loading?<FontAwesomeIcon className="mr-2" icon="sync-alt" spin />: <FontAwesomeIcon className="mr-2" icon="database" />}
                                    Guardar</button>
                             </div>
                       </div>

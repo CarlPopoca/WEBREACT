@@ -13,6 +13,7 @@ class IniciarSesion extends Component{
       loggedIn = false;
     }
     this.state = {
+      loading: false,
       alert_message:'',
       datosUsuario: {
         Email: '',
@@ -49,11 +50,15 @@ class IniciarSesion extends Component{
   {
     let valControles = this.validacionControles();
     if (valControles){
+      this.setState({
+        loading: true
+      });
       axios.post('https://localhost:44328/api/Usuarios/Ingresar', this.state.datosUsuario).then((response)=>{
         //Se genera el token
         localStorage.setItem("token", "jasdajalkcecklwcljekwej");
         //Se setea que ingreso
         this.setState({
+          loading: false,
           loggedIn: true,
           alert_message: '',
           datosUsuario: {
@@ -65,7 +70,8 @@ class IniciarSesion extends Component{
         }).catch(error=>{
 
             this.setState({
-              alert_message: 'Credenciales incorrectas'
+              alert_message: 'Credenciales incorrectas',
+              loading: false
             });
       });
     }
@@ -82,6 +88,7 @@ validacionBoton(e){
 }
 
   render(){
+    const {loading} = this.state;
     if (this.state.loggedIn===true){
       //Otra forma de hacer redirect
       // this.props.history.push("/")
@@ -155,7 +162,7 @@ validacionBoton(e){
                         </div>
                          <div className="form-group">
                              <button className="btn btn-success" onClick={this.submitForm.bind(this)}>
-                               <FontAwesomeIcon className="mr-2" icon="sign-in-alt" />
+                               {loading?<FontAwesomeIcon className="mr-2" icon="sync-alt" spin />: <FontAwesomeIcon className="mr-2" icon="sign-in-alt" />}
                                Ingresar</button>
                         </div>
                     </div>

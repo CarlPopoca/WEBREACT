@@ -19,7 +19,8 @@ class Contactos extends Component  {
       loggedIn = false;
     }
     this.state = {
-      contactos: [],
+    loading: false,
+    contactos: [],
 		isError:'',
 		isNullNombre: '',
 		isNullCelular: '',
@@ -49,6 +50,7 @@ class Contactos extends Component  {
  //editarContactoModal - Para la visualización  y cierre de la ventana modal de modificación
 
  //Método que refrescara el Table
+  
   componentWillMount(){
     this.refrescarContactos();
   }
@@ -131,6 +133,8 @@ validarContacto(contacto) {
 //Método que permite guardar los datos capturados en el modal de Alta
   agregarContacto (){
 	if (this.validarContacto(this.state.datosNuevoContacto)) {
+    this.setState({loading: true
+    });
 		axios.post('https://localhost:44386/api/Contactos', this.state.datosNuevoContacto).then((response)=>{
 		//Se setea la variable de state contactos, los simbolo {} permiten usarla para setearla por medio de let
 		//this.state contiene los contactos que se renderizaron en el Table
@@ -138,7 +142,7 @@ validarContacto(contacto) {
 		  //Se agrega al final el contacto que devolvio el metodo post de la api contactos
 		  contactos.push(response.data);
 		  //Inicializa el estado de las variables nuevoContactoModal y el objeto datosNuevoContacto
-		  this.setState({contactos, nuevoContactoModal:false, datosNuevoContacto: {
+		  this.setState({loading: false, contactos, nuevoContactoModal:false, datosNuevoContacto: {
 			Nombre: '',
 			Celular: '',
 			Sexo: ''
@@ -147,6 +151,7 @@ validarContacto(contacto) {
         //entra cuando los errores se propagan desde la base de datos, por ejemplo cuando la logitud de un
         //  es superior al campo de la base de datos
         this.setState({
+          loading: false,
           isError:'true',
           alert_message: 'No se pudo agregar el contacto'
         });
@@ -158,15 +163,17 @@ validarContacto(contacto) {
   actualizarContacto()
   {
     let {Id, Nombre, Celular, Sexo} = this.state.datosEditarContacto;
-	if (this.validarContacto(this.state.datosEditarContacto)) {
+	  if (this.validarContacto(this.state.datosEditarContacto)) {
+      this.setState({
+        loading: true
+      });
 		  axios.put('https://localhost:44386/api/Contactos/' + this.state.datosEditarContacto.Id, {
 		  Id, Nombre, Celular, Sexo
 			}).then((response)=>{
 		  //Se refresca el Table
   		  this.refrescarContactos();
   		  //Se inicializan la variable editarContactoModal y el objeto de datosEditarContacto
-  		  this.setState({editarContactoModal: false, datosEditarContacto: {
-
+  		  this.setState({loading: false, editarContactoModal: false, datosEditarContacto: {
   				Id: '',
   				Nombre: '',
   				Celular: '',
@@ -176,18 +183,20 @@ validarContacto(contacto) {
         //entra cuando los errores se propagan desde la base de datos, por ejemplo cuando la logitud de un
         //  es superior al campo de la base de datos
         this.setState({
+          loading: false,
           isError:'true',
           alert_message: 'No se pudo actualizar el contacto'
         });
       });
-
-	}
+	  }
   }
 
 //Método para eliminar un Contacto
  eliminarContacto(id){
+   var item = false;
    confirmAlert({
-    customUI: ({ onClose }) => {
+    customUI:({ onClose }) => {
+      var loading = false;
       return (
         <div className='custom-ui'>
           <h1 className="glyphicon glyphicon-warning-sign">
@@ -197,29 +206,31 @@ validarContacto(contacto) {
             <div className="col-sm-4"></div>
           <div className="btn-group col-sm-4">
               <Button color="secondary" size="sm" className="mr-3" onClick={onClose}>
-                  <FontAwesomeIcon className="mr-1" icon="times" />
+                  <FontAwesomeIcon className="mr-2" icon="times" />
                   No
                </Button>
               <Button color="primary" size="sm" className="btn btn-default "
-                  onClick={() => {
-                    axios.delete('https://localhost:44386/api/Contactos/'+id).then((response)=>{
-						              this.refrescarContactos();
-                          onClose();
-                     }).catch(error=>{
-                        //entra cuando los errores se propagan desde la base de datos, por ejemplo cuando la logitud de un
-                        //  es superior al campo de la base de datos
-                        this.setState({
-                          isError:'true',
-                          alert_message: 'No se pudo eliminar el contacto'
-                        });
-                      });
-                  }}
-                >
-                  <FontAwesomeIcon className="mr-1" icon="check" />
-                   Si
+                onClick={() => {
+                  item = true;
+                  axios.delete('https://localhost:44386/api/Contactos/'+id).then((response)=>{
+                  this.refrescarContactos();
+                  onClose();  
+            
+                }).catch(error=>{
+                  //entra cuando los errores se propagan desde la base de datos, por ejemplo cuando la logitud de un
+                  //  es superior al campo de la base de datos
+                    this.setState({
+                      isError: 'true',
+                      alert_message: 'No se pudo eliminar el contacto'
+                    });
+                  })
+                }}
+              >
+                <FontAwesomeIcon className="mr-2" icon="check" />
+                Si
               </Button>
               </div>
-                <div className="col-sm-4"></div>
+              <div className="col-sm-4"></div>
             </div>
           </div>
         );
@@ -256,6 +267,7 @@ validarContacto(contacto) {
   }
 
   render(){
+    const {loading} = this.state;
     if(this.state.loggedIn==false)
     {
       return <Redirect  to="/" />
@@ -263,7 +275,6 @@ validarContacto(contacto) {
     //Se setea a la variable local contactosReg el objeto contactos que se lleno al ejecutarse el método
     //componentWillMount en automatico y se retorna las filas del Table más una columna con los botones de
     //Editar y eliminar
-
     let contactosReg = this.state.contactos.map((contacto)=>{
       return(
         <tr key={contacto.Id}>
@@ -278,7 +289,6 @@ validarContacto(contacto) {
         </tr>
       )
     });
-
     // El botón Agregar cambia a true la variable nuevoContactoModal por medio del metodo toggleNuevoContactoModal
 
     //Modal para modificar datos se abre en automatico cuando su atributo isOpen cambia a verdadero por medio de la variable nuevoContactoModal
@@ -357,10 +367,16 @@ validarContacto(contacto) {
                 }}/>
             </FormGroup>
           </ModalBody>
-         <ModalFooter>
-           <Button color="primary" onClick={this.agregarContacto.bind(this)}>Guardar</Button>{' '}
-           <Button color="secondary" onClick={this.toggleNuevoContactoModal.bind(this)}>Cancelar</Button>
-         </ModalFooter>
+          <ModalFooter>
+            <Button color="primary" onClick={this.agregarContacto.bind(this)}>
+              {loading?<FontAwesomeIcon className="mr-2" icon="sync-alt" spin />: <FontAwesomeIcon className="mr-2" icon="database" />}
+              Guardar
+            </Button>
+            <Button color="secondary" onClick={this.toggleNuevoContactoModal.bind(this)}>
+              <FontAwesomeIcon className="mr-2" icon="times" />
+              Cancelar
+            </Button>
+          </ModalFooter>
         </Modal>
 
         <Modal isOpen={this.state.editarContactoModal}  toggle={this.toggleEditarContactoModal.bind(this)}>
@@ -415,8 +431,14 @@ validarContacto(contacto) {
           </FormGroup>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.actualizarContacto.bind(this)}>Guardar</Button>{' '}
-          <Button color="secondary" onClick={this.toggleEditarContactoModal.bind(this)}>Cancelar</Button>
+          <Button color="primary" onClick={this.actualizarContacto.bind(this)}>
+            {loading?<FontAwesomeIcon className="mr-2" icon="sync-alt" spin />: <FontAwesomeIcon className="mr-2" icon="database" />}
+            Guardar
+          </Button>
+          <Button color="secondary" onClick={this.toggleEditarContactoModal.bind(this)}>
+            <FontAwesomeIcon className="mr-2" icon="times" />
+            Cancelar
+          </Button>
         </ModalFooter>
        </Modal>
         <Table>

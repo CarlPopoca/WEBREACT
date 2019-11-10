@@ -22,7 +22,7 @@ directorio de la aplicación:
 
 Posicionese en la carpeta del código de la aplicación y ejecute los siguientes comandos:
 
-	yarn add react react-dom react-router-dom react-bootstrap bootstrap reactstrap axios react-confirm-alert
+	yarn add react react-dom react-router-dom react-bootstrap bootstrap reactstrap axios react-confirm-alert react-md-spinner
 
 Agregue las siguientes librerias para iconos de forawesome:
 
