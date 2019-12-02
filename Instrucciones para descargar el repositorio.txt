@@ -1,9 +1,9 @@
 
 Descargar el repositorio:
 
-	git clone https://github.com/CarlPopoca/WEBREACTREDUXCONTACTOS.git
+	git clone https://github.com/CarlPopoca/WEBREACTCONTACTOS.git
 
 Descargar las librerías que ocupa la aplicación, realice los siguientes pasos:
 
 	* Abra un cmd con permisos de administrador
-	* vaya a la ruta de la carpeta webreactreduxcontactos y ejecute el comando npm install 
+	* vaya a la ruta de la carpeta webreactcontactos y ejecute el comando npm install 

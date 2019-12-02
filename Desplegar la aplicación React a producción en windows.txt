@@ -1,7 +1,9 @@
---Genere el build que se utilizara a desplegar en producción
+--Genere el build que se utilizara a desplegar en producción:
+
 	yarn build
 
---Para crear establecer el directorio como servidor estatico
+--Para crear establecer el directorio como servidor estatico:
+
 	npm install -g serve
 
 --Para cambiarle el puerto al server 
@@ -31,7 +33,6 @@
 </system.webServer>
 </configuration>
 
-
 --Descargue el programa urlrewrite dela siguiente ruta e instalelo:
 
 	https://www.iis.net/downloads/microsoft/url-rewrite
@@ -49,8 +50,8 @@
 	* Por último de clic en el botón Aceptar.
 	* Pruebe el sitio web dando clic derecho sobre el sitio web, después en Administrar sitio web y por último en examinar.
 
-Nota: Si desea cambiar el puerto del sitio web react considere que podría hacer un cambio en los servicios en la clase startup.cs 
-y dentro del método configure en la línea de código app.UseCors para que el servicio pueda permitirle al sitio web de react utilizar 
+Nota: Si desea cambiar el puerto del sitio web considere que podría hacer un cambio en los servicios en la clase startup.cs 
+y dentro del método configure en la línea de código app.UseCors para que el servicio pueda permitirle al sitio web utilizar 
 sus métodos.
 
 
