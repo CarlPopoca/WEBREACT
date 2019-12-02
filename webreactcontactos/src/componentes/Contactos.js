@@ -242,6 +242,12 @@ validarContacto(contacto) {
       this.setState({
         contactos: response.data
       })
+    }).catch(error=>{
+      //entra cuando los errores se propagan desde la base de datos, por ejemplo cuando la logitud de un
+      //  es superior al campo de la base de datos
+      this.setState({
+        alert_message: 'Error al obtener los contactos'
+      });
     });
   }
 

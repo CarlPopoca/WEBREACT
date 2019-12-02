@@ -1,0 +1,56 @@
+--Genere el build que se utilizara a desplegar en producción
+	yarn build
+
+--Para crear establecer el directorio como servidor estatico
+	npm install -g serve
+
+--Para cambiarle el puerto al server 
+
+	serve -s build -l 4000
+
+--Copiar la carpeta build que se genero y copiarla en una ruta diferente, va a ser la que se establecera en el IIS
+
+--crear un archvo we.config y agregue lo siguiente:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+<system.webServer>
+  <rewrite>
+    <rules>
+      <rule name="Rewrite Text Requests" stopProcessing="true">
+        <match url=".*" />
+        <conditions>
+          <add input="{HTTP_METHOD}" pattern="^GET$" />
+          <add input="{HTTP_ACCEPT}" pattern="^text/html" />
+          <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+        </conditions>
+        <action type="Rewrite" url="/index.html" />
+      </rule>
+    </rules>
+  </rewrite>
+</system.webServer>
+</configuration>
+
+
+--Descargue el programa urlrewrite dela siguiente ruta e instalelo:
+
+	https://www.iis.net/downloads/microsoft/url-rewrite
+
+--Instale IIS en su equipo yendo a activar caracteristicas de windows y dando clic en el check Internet Information server.
+
+--Vaya a la ruta C:\inetpub\wwwroot y de clic derecho sobre esta carpeta, después de clic en la pestaña seguridad y 
+	otorguele control total a Usuarios, IIS_IUSRS y a Administradores.
+
+--Abra el Administrador de Internet Information Service (IIS) y realice las siguientes acciones:
+	
+	* De clic derecho sobre Sitios y de clic en Agregar sitio web
+	* Especifique un Nombre del sitio y seleccione la ruta del build
+	* De clic en conectar como e introduzca las credenciales del usuario Administrador
+	* Por último de clic en el botón Aceptar.
+	* Pruebe el sitio web dando clic derecho sobre el sitio web, después en Administrar sitio web y por último en examinar.
+
+Nota: Si desea cambiar el puerto del sitio web react considere que podría hacer un cambio en los servicios en la clase startup.cs 
+y dentro del método configure en la línea de código app.UseCors para que el servicio pueda permitirle al sitio web de react utilizar 
+sus métodos.
+
+
