@@ -10,7 +10,7 @@
 
 --Copiar la carpeta build que se genero y copiarla en una ruta diferente, va a ser la que se establecera en el IIS
 
---crear un archvo we.config y agregue lo siguiente:
+--crear un archvo web.config y agregue lo siguiente:
 
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>

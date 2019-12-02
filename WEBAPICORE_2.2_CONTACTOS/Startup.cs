@@ -59,7 +59,7 @@ namespace WEBAPICORE_2._2_CONTACTOS
             }
 
             //Se agrega que sitios pueden consumir los servicios y metodos que contenga la API
-            app.UseCors(options => options.WithOrigins("http://localhost:3000")
+            app.UseCors(options => options.WithOrigins("http://localhost:3000", "http://localhost:5080")
                         .AllowAnyMethod()
                         .AllowAnyHeader());
 
