@@ -2,6 +2,7 @@
 
 	yarn build
 
+***************************************************************
 --Para crear establecer el directorio como servidor estatico:
 
 	npm install -g serve
@@ -9,6 +10,9 @@
 --Para cambiarle el puerto al server 
 
 	serve -s build -l 4000
+	
+	Nota: Estos dos pasos son opcionales
+***************************************************************
 
 --Copiar la carpeta build que se genero y copiarla en una ruta diferente, va a ser la que se establecera en el IIS
 
