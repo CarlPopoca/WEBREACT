@@ -1,24 +1,29 @@
-*********Creación de proyecto webreactcontactos ********
+
 Abra un cmd y posicionese en la carpeta donde tendra el codigo del aplicativo, y ejecute el siguiente comando:
 	
 	create-react-app webreactcontactos
 	
-********Algunos comandos para trabajar*******
-Para iniciar el servidor de desarrollo:
-	 yarn start
+*******************************************************
 
-Para generar el build:
+Acontinuación algunos comandos para trabajar.
+
+Iniciar el servidor de desarrollo:
+
+	yarn start
+
+Generar el build:
+
 	yarn build
 
-Para correr una prueba:
+Correr una prueba:
+
 	yarn test
 
-Para remover esta herramienta y copias de dependencias de compilación, configuración de archivos y scripts en el 
+Remover esta herramienta y copias de dependencias de compilación, configuración de archivos y scripts en el 
 directorio de la aplicación:
 
-  yarn eject
-
-*****Comandos para la configuración de la aplicación********
+  	yarn eject
+********************************************************
 
 Posicionese en la carpeta del código de la aplicación y ejecute los siguientes comandos:
 
