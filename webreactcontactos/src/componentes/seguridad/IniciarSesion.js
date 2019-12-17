@@ -110,7 +110,7 @@ validacionBoton(e){
                                     <i className= {this.validacionBoton(this.state.isNullEmail)}>  <FontAwesomeIcon className="mr-1" icon="user-circle" /></i>
                                   </div>
                                 </div>
-                                <input type="email" className="form-control" type= "text" placeholder="Usuario" name="Email" value={this.state.datosUsuario.Email} onChange={(e)=>{
+                                <input type="email" className="form-control" placeholder="Usuario" name="Email" value={this.state.datosUsuario.Email} onChange={(e)=>{
                                     let {datosUsuario} = this.state;
                                     datosUsuario.Email = e.target.value;
                                     this.setState({datosUsuario});
