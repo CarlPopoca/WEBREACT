@@ -48,10 +48,10 @@ otorguele control total a Usuarios, IIS_IUSRS y a Administradores.
 
 Abra el Administrador de Internet Information Service (IIS) y realice las siguientes acciones:
 	
-	* De clic derecho sobre Sitios y de clic en Agregar sitio web
-	* Especifique un Nombre del sitio y seleccione la ruta del build
-	* De clic en conectar como e introduzca las credenciales del usuario Administrador
-	* Por último de clic en el botón Aceptar.
+	* Dar clic derecho sobre Sitios y de clic en Agregar sitio web
+	* Especifique un nombre del sitio y seleccione la ruta del build
+	* Dar clic en conectar como e introduzca las credenciales del usuario Administrador
+	* Por último dar clic en el botón Aceptar.
 	* Pruebe el sitio web dando clic derecho sobre el sitio web, después en Administrar sitio web y por último en examinar.
 
         Nota: Si desea cambiar el puerto del sitio web considere que podría hacer un cambio en los servicios en la clase startup.cs 
